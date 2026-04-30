@@ -8,6 +8,7 @@
   <style>
     .team-card { background:white; border-radius:var(--radius); padding:28px; text-align:center; border:1px solid var(--border); box-shadow:var(--shadow-sm); }
     .team-avatar { width:80px; height:80px; border-radius:50%; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin:0 auto 16px; border:3px solid var(--border); }
+    .team-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
     .team-name { font-family:var(--font-display); font-size:1.1rem; font-weight:700; color:var(--espresso); margin-bottom:4px; }
     .team-role { font-size:0.82rem; color:var(--muted); margin-bottom:8px; }
     .team-detail { font-size:0.82rem; color:var(--text-light); }
@@ -95,41 +96,24 @@
     <div class="section-header text-center"><div class="eyebrow">The Builders</div><h2>Who Made Tiffy</h2></div>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:600px;margin:0 auto">
       <div class="team-card fade-in">
-        <div class="team-avatar">👨‍💻</div>
+        <div class="team-avatar"><img src="public/img/pic1.jpg" alt="Gaurav Yadav"></div>
         <div class="team-name">Gaurav Yadav</div>
         <div class="team-role">Full Stack Developer</div>
-        <div class="team-detail">Roll: 23103055 · CSE 6A G2</div>
-        <div class="team-detail" style="margin-top:4px">NIT Jalandhar</div>
+        <div class="team-detail">CSE · NIT Jalandhar</div>
+        <div class="team-detail" style="margin-top:4px">23103055</div>
       </div>
       <div class="team-card fade-in">
-        <div class="team-avatar">👨‍💻</div>
+        <div class="team-avatar"><img src="public/img/my photo.jpg" alt="Dhruvansh Kumar"></div>
         <div class="team-name">Dhruvansh Kumar</div>
         <div class="team-role">Full Stack Developer</div>
         <div class="team-detail">CSE · NIT Jalandhar</div>
-        <div class="team-detail" style="margin-top:4px">IS&S Lab Partner</div>
+        <div class="team-detail" style="margin-top:4px">23103047</div>
       </div>
     </div>
-    <div style="text-align:center;margin-top:36px;padding:24px;background:var(--cream);border-radius:var(--radius);max-width:560px;margin:36px auto 0">
-      <div style="font-size:0.85rem;color:var(--muted)">Built as an original project for</div>
-      <div style="font-weight:700;color:var(--espresso);margin-top:4px">Information Security & Services (IS&S) Laboratory</div>
-      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px">National Institute of Technology, Jalandhar · 2025–26</div>
-    </div>
+    
   </div>
 </div>
 
-<!-- Tech Stack -->
-<div class="section" style="background:var(--cream)">
-  <div class="container">
-    <div class="section-header text-center"><div class="eyebrow">Technical Details</div><h2>Built With</h2></div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:800px;margin:0 auto">
-      ${[['HTML5','Semantic markup & structure'],['CSS3 / SCSS','Responsive design, animations'],['JavaScript ES6+','Client logic, cart, auth state'],['PHP','Email relay (mail.php)'],['MySQL / MongoDB','Order & subscription data'],['REST API','Backend endpoints'],['Scikit-learn','Demand analytics (planned)'],['UPI Gateway','Secure payment processing']].map(([t,d])=>`
-      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;box-shadow:var(--shadow-sm)">
-        <div style="font-weight:700;color:var(--espresso);font-size:0.9rem;margin-bottom:4px">${t}</div>
-        <div style="font-size:0.75rem;color:var(--muted)">${d}</div>
-      </div>`).join('')}
-    </div>
-  </div>
-</div>
 
 <!-- CTA -->
 <div class="section">

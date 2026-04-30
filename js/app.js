@@ -140,59 +140,59 @@ function validateForm(formEl) {
 
 // ── Mock Data ──────────────────────────────────────────────
 const PROVIDERS = [
-  { id: 'p1', name: "Aunty Sharma's Kitchen", owner: "Priya Sharma", area: "Sector 4, NIT Campus",
+  { id: 'p1', name: "Manya Tiffin Service", owner: "Manya", area: "Suranussi",
     cuisine: "North Indian", rating: 4.8, reviews: 142, isVeg: true, isOpen: true,
     plans: ['Daily', 'Weekly', 'Monthly'], priceFrom: 60, priceMonthly: 1499,
-    deliveryTime: "7:30 AM & 12:30 PM", emoji: "🍛",
+    deliveryTime: "7:30 AM & 12:30 PM", emoji: "🍛", image: "public/tiffins/tiffin1.png",
     meals: [
       { id: 'm1', name: "Lunch Thali", desc: "2 sabzi, dal, rice, 3 roti, salad, pickle", price: 80, category: "Lunch" },
       { id: 'm2', name: "Dinner Thali", desc: "1 sabzi, dal, rice, 4 roti, sweet", price: 75, category: "Dinner" },
       { id: 'm3', name: "Breakfast Box", desc: "Paratha with curd / poha / upma", price: 45, category: "Breakfast" },
     ]
   },
-  { id: 'p2', name: "South Tiffin House", owner: "Lakshmi Iyer", area: "Hostel Gate Road",
+  { id: 'p2', name: "RM Tiffin Service", owner: "RM", area: "Near SARB Multiplex",
     cuisine: "South Indian", rating: 4.6, reviews: 98, isVeg: true, isOpen: true,
     plans: ['Weekly', 'Monthly'], priceFrom: 55, priceMonthly: 1299,
-    deliveryTime: "8:00 AM & 1:00 PM", emoji: "🥘",
+    deliveryTime: "8:00 AM & 1:00 PM", emoji: "🥘", image: "public/tiffins/tiffin2.jpg",
     meals: [
       { id: 'm4', name: "Idli Sambar (4 pcs)", desc: "4 soft idlis, sambar, coconut chutney", price: 50, category: "Breakfast" },
       { id: 'm5', name: "Meals (Full)", desc: "Rice, sambar, 2 curries, rasam, papad", price: 90, category: "Lunch" },
     ]
   },
-  { id: 'p3', name: "Taste of Punjab", owner: "Gurpreet Kaur", area: "Staff Colony Lane",
+  { id: 'p3', name: "Jai Maa Tiffin Service", owner: "Gurpreet Kaur", area: "Near PAP Chownk",
     cuisine: "Punjabi", rating: 4.5, reviews: 67, isVeg: false, isOpen: true,
     plans: ['Daily', 'Monthly'], priceFrom: 70, priceMonthly: 1699,
-    deliveryTime: "12:00 PM & 7:30 PM", emoji: "🫕",
+    deliveryTime: "12:00 PM & 7:30 PM", emoji: "🫕", image: "public/tiffins/tiffin3.jpg",
     meals: [
       { id: 'm6', name: "Punjabi Lunch", desc: "Dal makhani / rajma, rice, 2 roti, lassi", price: 90, category: "Lunch" },
       { id: 'm7', name: "Non-Veg Thali", desc: "Chicken curry, rice, 3 roti, raita", price: 120, category: "Lunch" },
     ]
   },
-  { id: 'p4', name: "Ma Ki Rasoi", owner: "Anita Verma", area: "Near Boys Hostel B",
-    cuisine: "Home Style", rating: 4.9, reviews: 203, isVeg: true, isOpen: false,
-    plans: ['Monthly'], priceFrom: 55, priceMonthly: 1199,
-    deliveryTime: "Lunch & Dinner only", emoji: "🍲",
-    meals: [
-      { id: 'm8', name: "Monthly Subscription", desc: "Seasonal home-cooked thali, 2 meals/day", price: 1199, category: "Monthly" },
-    ]
-  },
-  { id: 'p5', name: "Spice Garden", owner: "Meena Pillai", area: "Market Block C",
-    cuisine: "Multi-Cuisine", rating: 4.4, reviews: 55, isVeg: true, isOpen: true,
-    plans: ['Daily', 'Weekly', 'Monthly'], priceFrom: 65, priceMonthly: 1549,
-    deliveryTime: "8:00 AM, 1:00 PM & 8:00 PM", emoji: "🌿",
-    meals: [
-      { id: 'm9', name: "Veg Combo", desc: "Rice / roti, dal, sabzi, salad", price: 70, category: "Lunch" },
-      { id: 'm10', name: "Special Weekend Thali", desc: "Paneer dish, dal, rice, roti, kheer", price: 110, category: "Special" },
-    ]
-  },
-  { id: 'p6', name: "Bengal Kitchen", owner: "Sanjukta Das", area: "Faculty Quarters Lane",
-    cuisine: "Bengali", rating: 4.7, reviews: 81, isVeg: false, isOpen: true,
-    plans: ['Weekly', 'Monthly'], priceFrom: 60, priceMonthly: 1399,
-    deliveryTime: "12:30 PM & 7:00 PM", emoji: "🐟",
-    meals: [
-      { id: 'm11', name: "Bong Lunch Thali", desc: "Rice, dal, begun bhaja, 1 fish curry / veg", price: 85, category: "Lunch" },
-    ]
-  }
+  // { id: 'p4', name: "Ma Ki Rasoi", owner: "Anita Verma", area: "Near Boys Hostel B",
+  //   cuisine: "Home Style", rating: 4.9, reviews: 203, isVeg: true, isOpen: false,
+  //   plans: ['Monthly'], priceFrom: 55, priceMonthly: 1199,
+  //   deliveryTime: "Lunch & Dinner only", emoji: "🍲",
+  //   meals: [
+  //     { id: 'm8', name: "Monthly Subscription", desc: "Seasonal home-cooked thali, 2 meals/day", price: 1199, category: "Monthly" },
+  //   ]
+  // },
+  // { id: 'p5', name: "Spice Garden", owner: "Meena Pillai", area: "Market Block C",
+  //   cuisine: "Multi-Cuisine", rating: 4.4, reviews: 55, isVeg: true, isOpen: true,
+  //   plans: ['Daily', 'Weekly', 'Monthly'], priceFrom: 65, priceMonthly: 1549,
+  //   deliveryTime: "8:00 AM, 1:00 PM & 8:00 PM", emoji: "🌿",
+  //   meals: [
+  //     { id: 'm9', name: "Veg Combo", desc: "Rice / roti, dal, sabzi, salad", price: 70, category: "Lunch" },
+  //     { id: 'm10', name: "Special Weekend Thali", desc: "Paneer dish, dal, rice, roti, kheer", price: 110, category: "Special" },
+  //   ]
+  // },
+  // { id: 'p6', name: "Bengal Kitchen", owner: "Sanjukta Das", area: "Faculty Quarters Lane",
+  //   cuisine: "Bengali", rating: 4.7, reviews: 81, isVeg: false, isOpen: true,
+  //   plans: ['Weekly', 'Monthly'], priceFrom: 60, priceMonthly: 1399,
+  //   deliveryTime: "12:30 PM & 7:00 PM", emoji: "🐟",
+  //   meals: [
+  //     { id: 'm11', name: "Bong Lunch Thali", desc: "Rice, dal, begun bhaja, 1 fish curry / veg", price: 85, category: "Lunch" },
+  //   ]
+  // }
 ];
 
 function getProvider(id) { return PROVIDERS.find(p => p.id === id) || null; }

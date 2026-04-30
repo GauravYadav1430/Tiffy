@@ -10,7 +10,8 @@
     .sub-card:hover { box-shadow: var(--shadow-md); }
     .sub-card-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
     .sub-card-body { padding: 18px 22px; }
-    .sub-avatar { width: 48px; height: 48px; border-radius: 12px; background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+    .sub-avatar { width: 48px; height: 48px; border-radius: 12px; background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; overflow: hidden; }
+    .sub-avatar img, .order-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .sub-info { flex: 1; }
     .sub-name { font-weight: 700; color: var(--espresso); font-size: 0.95rem; }
     .sub-plan { font-size: 0.8rem; color: var(--muted); }
@@ -139,9 +140,11 @@ if (!user) throw 0;
 // Seed demo subscriptions if none
 let subs = JSON.parse(localStorage.getItem('tiffy_subscriptions')||'[]');
 if (!subs.length) {
+  const provider1 = getProvider('p1') || {};
+  const provider2 = getProvider('p2') || {};
   subs = [
-    { id:'sub1', providerId:'p1', providerName:"Aunty Sharma's Kitchen", plan:'Monthly', status:'active', startDate: new Date(Date.now()-15*86400000).toISOString(), emoji:'🍛', nextRenewal: new Date(Date.now()+15*86400000).toLocaleDateString() },
-    { id:'sub2', providerId:'p2', providerName:'South Tiffin House',      plan:'Weekly',  status:'active', startDate: new Date(Date.now()-3*86400000).toISOString(), emoji:'🥘',  nextRenewal: new Date(Date.now()+4*86400000).toLocaleDateString() },
+    { id:'sub1', providerId:'p1', providerName: provider1.name || "Aunty Sharma's Kitchen", plan:'Monthly', status:'active', startDate: new Date(Date.now()-15*86400000).toISOString(), emoji: provider1.emoji || '🍛', image: provider1.image || '', nextRenewal: new Date(Date.now()+15*86400000).toLocaleDateString() },
+    { id:'sub2', providerId:'p2', providerName: provider2.name || 'South Tiffin House',      plan:'Weekly',  status:'active', startDate: new Date(Date.now()-3*86400000).toISOString(), emoji: provider2.emoji || '🥘',  image: provider2.image || '', nextRenewal: new Date(Date.now()+4*86400000).toLocaleDateString() },
   ];
   localStorage.setItem('tiffy_subscriptions', JSON.stringify(subs));
 }
@@ -189,23 +192,34 @@ document.getElementById('todays-meals').innerHTML = meals.map(m=>`
   </div>`).join('');
 
 // Active subs mini
-document.getElementById('active-subs-mini').innerHTML = subs.filter(s=>s.status==='active').map(s=>`
+document.getElementById('active-subs-mini').innerHTML = subs.filter(s=>s.status==='active').map(s=>{
+  const provider = getProvider(s.providerId) || {};
+  const displayName = provider.name || s.providerName;
+  const avatarSrc = s.image || provider.image;
+  const avatarHtml = avatarSrc ? `<img src="${avatarSrc}" alt="${displayName}">` : s.emoji;
+  return `
   <div class="order-card" style="margin-bottom:10px;cursor:pointer" onclick="showSection('subscriptions')">
-    <div class="order-avatar">${s.emoji}</div>
+    <div class="order-avatar">${avatarHtml}</div>
     <div class="order-details">
-      <div class="order-name">${s.providerName}</div>
+      <div class="order-name">${displayName}</div>
       <div class="order-meta">${s.plan} Plan · Renews ${s.nextRenewal||'soon'}</div>
     </div>
     <span class="badge badge-green">Active</span>
-  </div>`).join('');
+  </div>`;
+}).join('');
 
 // Full subscriptions list
-document.getElementById('subs-list').innerHTML = subs.length ? subs.map(s=>`
+document.getElementById('subs-list').innerHTML = subs.length ? subs.map(s=>{
+  const provider = getProvider(s.providerId) || {};
+  const displayName = provider.name || s.providerName;
+  const avatarSrc = s.image || provider.image;
+  const avatarHtml = avatarSrc ? `<img src="${avatarSrc}" alt="${displayName}">` : s.emoji;
+  return `
   <div class="sub-card mb-16" style="margin-bottom:16px">
     <div class="sub-card-header">
-      <div class="sub-avatar">${s.emoji}</div>
+      <div class="sub-avatar">${avatarHtml}</div>
       <div class="sub-info">
-        <div class="sub-name">${s.providerName}</div>
+        <div class="sub-name">${displayName}</div>
         <div class="sub-plan">${s.plan} Plan · Started ${new Date(s.startDate).toLocaleDateString('en-IN')}</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
@@ -219,17 +233,22 @@ document.getElementById('subs-list').innerHTML = subs.length ? subs.map(s=>`
         <a href="provider.html?id=${s.providerId}" style="color:var(--saffron);font-weight:600">View Provider →</a>
       </div>
     </div>
-  </div>`) .join('') :
+  </div>`;
+}).join('') :
 `<div class="empty-state"><div class="empty-icon">🍽️</div><h3>No Active Subscriptions</h3><p>Find a tiffin provider and subscribe to get started.</p><a href="discovery.html" class="btn btn-primary">Browse Providers</a></div>`;
 
 // Pause meals
 document.getElementById('pause-list').innerHTML = subs.filter(s=>s.status==='active').map(s=>{
+  const provider = getProvider(s.providerId) || {};
+  const displayName = provider.name || s.providerName;
+  const avatarSrc = s.image || provider.image;
+  const avatarHtml = avatarSrc ? `<img src="${avatarSrc}" alt="${displayName}">` : s.emoji;
   const mealTypes = ['Breakfast','Lunch','Dinner'];
   return `
   <div class="sub-card" style="margin-bottom:20px">
     <div class="sub-card-header">
-      <div class="sub-avatar">${s.emoji}</div>
-      <div class="sub-info"><div class="sub-name">${s.providerName}</div><div class="sub-plan">${s.plan} Plan</div></div>
+      <div class="sub-avatar">${avatarHtml}</div>
+      <div class="sub-info"><div class="sub-name">${displayName}</div><div class="sub-plan">${s.plan} Plan</div></div>
     </div>
     <div class="sub-card-body">
       <div style="font-size:0.82rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">Tomorrow's Meals</div>
