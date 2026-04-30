@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="discovery.html">Find Tiffin</a><a href="subscriptions.html">Plans</a><a href="about.html">About</a></div>
+    <div class="nav-actions">
+      <a href="cart.html" style="text-decoration:none"><button class="btn-cart">🛒 Cart<span class="cart-badge" style="display:none">0</span></button></a>
+      <button class="btn-nav-login" onclick="window.location.href='register.html'">Register</button>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo"><div class="wordmark">Tiffy.</div></div>
+    <h2 class="auth-title">Welcome back</h2>
+    <p class="auth-sub">Login to your account to manage your tiffin subscriptions.</p>
+
+    <div id="login-error" style="display:none;background:var(--red-light);color:var(--red);padding:12px 16px;border-radius:10px;font-size:0.85rem;margin-bottom:16px;"></div>
+
+    <div class="form-group">
+      <label class="form-label">Email or College ID <span class="req">*</span></label>
+      <input type="email" class="form-control" id="login-email" placeholder="yourname@nitj.ac.in" required>
+      <span class="form-error">Enter a valid email</span>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password <span class="req">*</span></label>
+      <input type="password" class="form-control" id="login-pass" placeholder="Your password" required>
+      <span class="form-error">Password is required</span>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:20px;">
+      <a href="#" style="font-size:0.85rem;color:var(--saffron);">Forgot password?</a>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Login →</button>
+
+    <div class="divider"><span>or continue as demo</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="btn btn-secondary btn-sm" onclick="demoLogin('student')">👨‍🎓 Demo Student</button>
+      <button class="btn btn-secondary btn-sm" onclick="demoLogin('provider')">👩‍🍳 Demo Provider</button>
+    </div>
+
+    <p class="auth-switch">Don't have an account? <a href="register.html">Register here</a></p>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value.trim();
+  const errEl = document.getElementById('login-error');
+  if (!email || !pass) { errEl.textContent='Please fill all fields.'; errEl.style.display='block'; return; }
+  // Simulate auth — check localStorage for registered users
+  const users = JSON.parse(localStorage.getItem('tiffy_users')||'[]');
+  const found = users.find(u => u.email===email && u.password===pass);
+  if (!found) { errEl.textContent='Invalid email or password. Use demo buttons to try the app.'; errEl.style.display='block'; return; }
+  errEl.style.display='none';
+  Auth.set(found);
+  showToast(`Welcome back, ${found.name}!`,'success');
+  const next = new URLSearchParams(location.search).get('next');
+  setTimeout(()=>window.location.href = next || (found.role==='provider'?'provider-dashboard.html':'student-dashboard.html'), 800);
+}
+function demoLogin(role) {
+  const user = role==='student'
+    ? { id:'demo-s', name:'Gaurav Yadav', email:'gaurav@nitj.ac.in', role:'student', hostel:'Boys Hostel A', block:'A-204', rollNo:'23103055' }
+    : { id:'demo-p', name:'Priya Sharma', email:'priya@tiffy.in', role:'provider', providerId:'p1' };
+  Auth.set(user);
+  showToast(`Logged in as demo ${role}`, 'success');
+  setTimeout(()=>window.location.href = role==='provider'?'provider-dashboard.html':'student-dashboard.html', 800);
+}
+document.getElementById('login-pass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .team-card { background:white; border-radius:var(--radius); padding:28px; text-align:center; border:1px solid var(--border); box-shadow:var(--shadow-sm); }
+    .team-avatar { width:80px; height:80px; border-radius:50%; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin:0 auto 16px; border:3px solid var(--border); }
+    .team-name { font-family:var(--font-display); font-size:1.1rem; font-weight:700; color:var(--espresso); margin-bottom:4px; }
+    .team-role { font-size:0.82rem; color:var(--muted); margin-bottom:8px; }
+    .team-detail { font-size:0.82rem; color:var(--text-light); }
+    .value-card { padding:28px; background:white; border-radius:var(--radius); border:1px solid var(--border); }
+    .value-icon { font-size:2rem; margin-bottom:12px; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="discovery.html">Find Tiffin</a><a href="subscriptions.html">Plans</a><a href="about.html" class="active">About</a></div>
+    <div class="nav-actions">
+      <a href="cart.html" style="text-decoration:none"><button class="btn-cart">🛒 Cart<span class="cart-badge" style="display:none">0</span></button></a>
+      <button class="btn-nav-login">Login</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div style="background:linear-gradient(135deg,var(--espresso) 0%,var(--deep) 100%);padding:calc(var(--nav-h)+80px) 0 80px;position:relative;overflow:hidden">
+  <div style="position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(232,136,26,0.2) 0%,transparent 70%);pointer-events:none"></div>
+  <div class="container" style="position:relative;z-index:1">
+    <div style="max-width:640px">
+      <div style="display:inline-block;background:rgba(232,136,26,0.2);color:var(--saffron);border:1px solid rgba(232,136,26,0.4);padding:6px 16px;border-radius:40px;font-size:0.8rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">IS&S Lab Project · NIT Jalandhar</div>
+      <h1 style="color:white;margin-bottom:20px">About <span style="color:var(--saffron);font-style:italic">Tiffy</span></h1>
+      <p style="color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.8;max-width:540px">Tiffy was born out of a simple frustration: the hostel mess was boring, food delivery apps were expensive, and local aunties making incredible home food had no way to reach students. We built the bridge.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Mission -->
+<div class="section">
+  <div class="container">
+    <div class="grid-2" style="gap:60px;align-items:center">
+      <div>
+        <div class="section-header" style="margin-bottom:20px">
+          <div class="eyebrow">Our Mission</div>
+          <h2>Connecting Students With Home-Cooked Food</h2>
+        </div>
+        <p style="line-height:1.8;margin-bottom:16px">Tiffy is a web-based platform designed for hostel residents at NIT Jalandhar. We solve a real problem: hundreds of local households prepare exceptional home-cooked tiffin services but have no digital presence, while thousands of students desperately want an alternative to the mess.</p>
+        <p style="line-height:1.8;margin-bottom:16px">Unlike mainstream food delivery platforms that require certifications and charge high commissions, Tiffy is built specifically for this ecosystem — lightweight, accessible, and designed for both students with limited budgets and home cooks with limited tech experience.</p>
+        <p style="line-height:1.8">The result: affordable, hygienic, home-style food for students, and a reliable income stream for local providers.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="background:var(--cream);border-radius:var(--radius);padding:24px;text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.4rem;font-weight:900;color:var(--saffron)">1,200+</div>
+          <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">Students served</div>
+        </div>
+        <div style="background:var(--cream);border-radius:var(--radius);padding:24px;text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.4rem;font-weight:900;color:var(--saffron)">48</div>
+          <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">Active providers</div>
+        </div>
+        <div style="background:var(--cream);border-radius:var(--radius);padding:24px;text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.4rem;font-weight:900;color:var(--saffron)">27,000+</div>
+          <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">Meals delivered</div>
+        </div>
+        <div style="background:var(--cream);border-radius:var(--radius);padding:24px;text-align:center">
+          <div style="font-family:var(--font-display);font-size:2.4rem;font-weight:900;color:var(--saffron)">4.7★</div>
+          <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">Avg. student rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Values -->
+<div class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-header text-center"><div class="eyebrow">What We Stand For</div><h2>Our Values</h2></div>
+    <div class="grid-3">
+      <div class="value-card fade-in"><div class="value-icon">🏡</div><h4 style="color:var(--espresso);margin-bottom:8px">Home-Style Always</h4><p>We believe the best food is made with care in someone's home kitchen. We never compromise on that.</p></div>
+      <div class="value-card fade-in"><div class="value-icon">💰</div><h4 style="color:var(--espresso);margin-bottom:8px">Affordable for Students</h4><p>Hostel residents are on tight budgets. Our platform is designed to keep meal costs as low as possible.</p></div>
+      <div class="value-card fade-in"><div class="value-icon">🤝</div><h4 style="color:var(--espresso);margin-bottom:8px">Fair to Providers</h4><p>We charge a minimal 5% platform fee — far less than mainstream apps — so providers keep most of what they earn.</p></div>
+      <div class="value-card fade-in"><div class="value-icon">🔒</div><h4 style="color:var(--espresso);margin-bottom:8px">Transparent & Secure</h4><p>No hidden charges. Secure payments via compliant gateways. No raw financial data stored on our servers.</p></div>
+      <div class="value-card fade-in"><div class="value-icon">⚡</div><h4 style="color:var(--espresso);margin-bottom:8px">Simple to Use</h4><p>Zero training needed for students. Minimal training for providers. The app should be as intuitive as WhatsApp.</p></div>
+      <div class="value-card fade-in"><div class="value-icon">🌿</div><h4 style="color:var(--espresso);margin-bottom:8px">Community First</h4><p>We're building a local food ecosystem — connecting the campus community and strengthening local livelihoods.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Team -->
+<div class="section">
+  <div class="container">
+    <div class="section-header text-center"><div class="eyebrow">The Builders</div><h2>Who Made Tiffy</h2></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:600px;margin:0 auto">
+      <div class="team-card fade-in">
+        <div class="team-avatar">👨‍💻</div>
+        <div class="team-name">Gaurav Yadav</div>
+        <div class="team-role">Full Stack Developer</div>
+        <div class="team-detail">Roll: 23103055 · CSE 6A G2</div>
+        <div class="team-detail" style="margin-top:4px">NIT Jalandhar</div>
+      </div>
+      <div class="team-card fade-in">
+        <div class="team-avatar">👨‍💻</div>
+        <div class="team-name">Dhruvansh Kumar</div>
+        <div class="team-role">Full Stack Developer</div>
+        <div class="team-detail">CSE · NIT Jalandhar</div>
+        <div class="team-detail" style="margin-top:4px">IS&S Lab Partner</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;padding:24px;background:var(--cream);border-radius:var(--radius);max-width:560px;margin:36px auto 0">
+      <div style="font-size:0.85rem;color:var(--muted)">Built as an original project for</div>
+      <div style="font-weight:700;color:var(--espresso);margin-top:4px">Information Security & Services (IS&S) Laboratory</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:2px">National Institute of Technology, Jalandhar · 2025–26</div>
+    </div>
+  </div>
+</div>
+
+<!-- Tech Stack -->
+<div class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-header text-center"><div class="eyebrow">Technical Details</div><h2>Built With</h2></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:800px;margin:0 auto">
+      ${[['HTML5','Semantic markup & structure'],['CSS3 / SCSS','Responsive design, animations'],['JavaScript ES6+','Client logic, cart, auth state'],['PHP','Email relay (mail.php)'],['MySQL / MongoDB','Order & subscription data'],['REST API','Backend endpoints'],['Scikit-learn','Demand analytics (planned)'],['UPI Gateway','Secure payment processing']].map(([t,d])=>`
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;box-shadow:var(--shadow-sm)">
+        <div style="font-weight:700;color:var(--espresso);font-size:0.9rem;margin-bottom:4px">${t}</div>
+        <div style="font-size:0.75rem;color:var(--muted)">${d}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section">
+  <div class="container" style="text-align:center">
+    <h2 style="color:var(--espresso);margin-bottom:12px">Ready to Try Tiffy?</h2>
+    <p style="margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto">Join hundreds of students already eating better, for less, every single day.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="register.html" class="btn btn-primary btn-lg">Register as Student</a>
+      <a href="discovery.html" class="btn btn-secondary btn-lg">Browse Providers</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="wordmark">Tiffy.</div><p>Home-cooked meals for hostel residents. NIT Jalandhar campus.</p></div>
+      <div class="footer-col"><h5>Students</h5><a href="discovery.html">Find Providers</a><a href="subscriptions.html">Meal Plans</a><a href="student-dashboard.html">Dashboard</a></div>
+      <div class="footer-col"><h5>Providers</h5><a href="register.html?role=provider">Join as Provider</a><a href="provider-dashboard.html">Provider Hub</a></div>
+      <div class="footer-col"><h5>Company</h5><a href="about.html">About</a><a href="#">Help & FAQ</a><a href="#">Privacy Policy</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Tiffy · NIT Jalandhar IS&S Lab · Gaurav Yadav & Dhruvansh Kumar</span></div>
+  </div>
+</footer>
+<script src="js/app.js"></script>
+</body>
+</html>

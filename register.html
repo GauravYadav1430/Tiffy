@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="discovery.html">Find Tiffin</a></div>
+    <div class="nav-actions">
+      <button class="btn-nav-login" onclick="window.location.href='login.html'">Login</button>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-page" style="align-items:flex-start;padding-top:calc(var(--nav-h)+40px);">
+  <div class="auth-card" style="max-width:520px;">
+    <div class="auth-logo"><div class="wordmark">Tiffy.</div></div>
+    <h2 class="auth-title">Create an Account</h2>
+    <p class="auth-sub">Join thousands of students and providers on campus.</p>
+
+    <!-- Role selector -->
+    <div class="role-selector">
+      <input type="radio" name="role" id="role-student" class="role-option" value="student" checked onchange="switchRole()">
+      <label class="role-label" for="role-student"><span class="icon">🎓</span>I'm a Student</label>
+      <input type="radio" name="role" id="role-provider" class="role-option" value="provider" onchange="switchRole()">
+      <label class="role-label" for="role-provider"><span class="icon">👩‍🍳</span>I'm a Provider</label>
+    </div>
+
+    <!-- Student Fields -->
+    <div id="student-fields">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="s-name" placeholder="Gaurav Yadav" required>
+          <span class="form-error">Required</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Roll Number <span class="req">*</span></label>
+          <input type="text" class="form-control" id="s-roll" placeholder="23103055" required>
+          <span class="form-error">Required</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">College Email <span class="req">*</span></label>
+        <input type="email" class="form-control" id="s-email" placeholder="yourname@nitj.ac.in" required>
+        <span class="form-error">Enter valid email</span>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Hostel <span class="req">*</span></label>
+          <select class="form-control" id="s-hostel" required>
+            <option value="">Select Hostel</option>
+            <option>Boys Hostel A</option>
+            <option>Boys Hostel B</option>
+            <option>Boys Hostel C</option>
+            <option>Girls Hostel</option>
+            <option>PG Hostel</option>
+            <option>Faculty Hostel</option>
+          </select>
+          <span class="form-error">Required</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Room / Block</label>
+          <input type="text" class="form-control" id="s-block" placeholder="A-204">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone Number <span class="req">*</span></label>
+          <input type="tel" class="form-control" id="s-phone" placeholder="9876543210" required>
+          <span class="form-error">Required</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password <span class="req">*</span></label>
+          <input type="password" class="form-control" id="s-pass" placeholder="Min. 8 characters" required>
+          <span class="form-error">Min 8 characters</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Provider Fields -->
+    <div id="provider-fields" style="display:none;">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Your Full Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="p-name" placeholder="Priya Sharma" required>
+          <span class="form-error">Required</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kitchen / Service Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="p-kitchen" placeholder="Aunty Sharma's Kitchen" required>
+          <span class="form-error">Required</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email <span class="req">*</span></label>
+        <input type="email" class="form-control" id="p-email" placeholder="you@example.com" required>
+        <span class="form-error">Enter valid email</span>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone Number <span class="req">*</span></label>
+          <input type="tel" class="form-control" id="p-phone" placeholder="9876543210" required>
+          <span class="form-error">Required</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Area / Location <span class="req">*</span></label>
+          <input type="text" class="form-control" id="p-area" placeholder="Near Boys Hostel B" required>
+          <span class="form-error">Required</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cuisine Type <span class="req">*</span></label>
+        <select class="form-control" id="p-cuisine" required>
+          <option value="">Select Cuisine</option>
+          <option>North Indian</option><option>South Indian</option><option>Punjabi</option>
+          <option>Bengali</option><option>Home Style</option><option>Multi-Cuisine</option>
+        </select>
+        <span class="form-error">Required</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Brief Description</label>
+        <textarea class="form-control" id="p-desc" placeholder="Tell students a little about your cooking…" style="min-height:80px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password <span class="req">*</span></label>
+        <input type="password" class="form-control" id="p-pass" placeholder="Min. 8 characters" required>
+        <span class="form-error">Min 8 characters</span>
+      </div>
+      <div style="background:rgba(232,136,26,0.08);border:1px solid rgba(232,136,26,0.3);border-radius:10px;padding:14px;margin-bottom:4px;font-size:0.85rem;color:var(--turmeric);">
+        ⚠️ Provider accounts require admin approval before going live. You'll receive an email within 24 hours.
+      </div>
+    </div>
+
+    <div style="margin:20px 0 16px;display:flex;align-items:flex-start;gap:10px;">
+      <input type="checkbox" id="terms-check" style="margin-top:3px;accent-color:var(--saffron);width:16px;height:16px;flex-shrink:0;">
+      <label for="terms-check" style="font-size:0.85rem;color:var(--text-light);cursor:pointer;">I agree to the <a href="#" style="color:var(--saffron);">Terms of Service</a> and <a href="#" style="color:var(--saffron);">Privacy Policy</a></label>
+    </div>
+
+    <div id="reg-error" style="display:none;background:var(--red-light);color:var(--red);padding:12px 16px;border-radius:10px;font-size:0.85rem;margin-bottom:14px;"></div>
+
+    <button class="btn btn-primary btn-full" onclick="doRegister()">Create Account →</button>
+    <p class="auth-switch">Already have an account? <a href="login.html">Login here</a></p>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+if (params.get('role') === 'provider') {
+  document.getElementById('role-provider').checked = true;
+  switchRole();
+}
+
+function switchRole() {
+  const isProvider = document.getElementById('role-provider').checked;
+  document.getElementById('student-fields').style.display  = isProvider ? 'none' : 'block';
+  document.getElementById('provider-fields').style.display = isProvider ? 'block' : 'none';
+}
+
+function doRegister() {
+  const isProvider = document.getElementById('role-provider').checked;
+  const errEl = document.getElementById('reg-error');
+  errEl.style.display = 'none';
+
+  if (!document.getElementById('terms-check').checked) {
+    errEl.textContent = 'Please accept the Terms of Service to continue.';
+    errEl.style.display = 'block'; return;
+  }
+
+  let user;
+  if (!isProvider) {
+    const name  = document.getElementById('s-name').value.trim();
+    const roll  = document.getElementById('s-roll').value.trim();
+    const email = document.getElementById('s-email').value.trim();
+    const hostel= document.getElementById('s-hostel').value;
+    const block = document.getElementById('s-block').value.trim();
+    const phone = document.getElementById('s-phone').value.trim();
+    const pass  = document.getElementById('s-pass').value;
+    if (!name||!roll||!email||!hostel||!phone||!pass) { errEl.textContent='Please fill all required fields.'; errEl.style.display='block'; return; }
+    if (pass.length < 8) { errEl.textContent='Password must be at least 8 characters.'; errEl.style.display='block'; return; }
+    user = { id:'u'+Date.now(), name, roll, email, hostel, block, phone, password:pass, role:'student' };
+  } else {
+    const name    = document.getElementById('p-name').value.trim();
+    const kitchen = document.getElementById('p-kitchen').value.trim();
+    const email   = document.getElementById('p-email').value.trim();
+    const phone   = document.getElementById('p-phone').value.trim();
+    const area    = document.getElementById('p-area').value.trim();
+    const cuisine = document.getElementById('p-cuisine').value;
+    const pass    = document.getElementById('p-pass').value;
+    if (!name||!kitchen||!email||!phone||!area||!cuisine||!pass) { errEl.textContent='Please fill all required fields.'; errEl.style.display='block'; return; }
+    if (pass.length < 8) { errEl.textContent='Password must be at least 8 characters.'; errEl.style.display='block'; return; }
+    user = { id:'u'+Date.now(), name, kitchen, email, phone, area, cuisine, password:pass, role:'provider', status:'pending' };
+  }
+
+  const users = JSON.parse(localStorage.getItem('tiffy_users')||'[]');
+  if (users.find(u=>u.email===user.email)) { errEl.textContent='This email is already registered.'; errEl.style.display='block'; return; }
+  users.push(user);
+  localStorage.setItem('tiffy_users', JSON.stringify(users));
+  Auth.set(user);
+  showToast('Account created successfully!', 'success');
+  setTimeout(()=>window.location.href = isProvider?'provider-dashboard.html':'student-dashboard.html', 900);
+}
+</script>
+</body>
+</html>

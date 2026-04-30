@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .sub-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow var(--transition); }
+    .sub-card:hover { box-shadow: var(--shadow-md); }
+    .sub-card-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+    .sub-card-body { padding: 18px 22px; }
+    .sub-avatar { width: 48px; height: 48px; border-radius: 12px; background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+    .sub-info { flex: 1; }
+    .sub-name { font-weight: 700; color: var(--espresso); font-size: 0.95rem; }
+    .sub-plan { font-size: 0.8rem; color: var(--muted); }
+    .meal-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .meal-toggle-row:last-child { border-bottom: none; }
+    .meal-toggle-label { font-size: 0.88rem; font-weight: 500; color: var(--espresso); }
+    .meal-toggle-time { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+    .toggle-wrap { display: flex; align-items: center; gap: 10px; }
+    .cutoff-warn { font-size: 0.75rem; color: var(--red); }
+    /* Toggle switch */
+    .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; inset: 0; background: #ddd; border-radius: 24px; cursor: pointer; transition: .3s; }
+    .slider:before { content:""; position:absolute; height:18px; width:18px; left:3px; bottom:3px; background:white; border-radius:50%; transition:.3s; }
+    input:checked + .slider { background: var(--green); }
+    input:checked + .slider:before { transform: translateX(20px); }
+    input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
+    .history-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+    .history-row:last-child { border-bottom: none; }
+    .history-date { color: var(--muted); width: 90px; flex-shrink: 0; }
+    .history-provider { flex: 1; font-weight: 500; color: var(--espresso); }
+    .history-meal { color: var(--text-light); }
+    .history-amt { font-family: var(--font-mono); color: var(--saffron); flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="discovery.html">Find Tiffin</a><a href="subscriptions.html">Plans</a></div>
+    <div class="nav-actions">
+      <a href="cart.html" style="text-decoration:none"><button class="btn-cart">🛒 Cart<span class="cart-badge" style="display:none">0</span></button></a>
+      <button class="btn-nav-login" onclick="Auth.logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">Tiffy.</div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Student Menu</div>
+      <a href="#overview"    class="sidebar-link active" onclick="showSection('overview',this)"><span class="icon">🏠</span> Overview</a>
+      <a href="#subscriptions" class="sidebar-link" onclick="showSection('subscriptions',this)"><span class="icon">📋</span> My Subscriptions</a>
+      <a href="#pause"       class="sidebar-link" onclick="showSection('pause',this)"><span class="icon">⏸️</span> Pause Meals</a>
+      <a href="#orders"      class="sidebar-link" onclick="showSection('orders',this)"><span class="icon">📦</span> Order History</a>
+      <a href="#profile"     class="sidebar-link" onclick="showSection('profile',this)"><span class="icon">👤</span> My Profile</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quick Links</div>
+      <a href="discovery.html" class="sidebar-link"><span class="icon">🔍</span> Find New Tiffin</a>
+      <a href="cart.html"      class="sidebar-link"><span class="icon">🛒</span> Cart</a>
+    </div>
+    <div style="padding:24px;margin-top:auto;">
+      <button class="btn btn-sm" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);width:100%" onclick="Auth.logout()">← Logout</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="dashboard-content">
+    <div id="user-greeting" class="dash-header"></div>
+
+    <!-- Overview -->
+    <div id="sec-overview" class="dash-section">
+      <div class="stat-cards" id="stat-cards"></div>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="color:var(--espresso);margin-bottom:16px;">Today's Meals</h3>
+          <div id="todays-meals"></div>
+        </div>
+        <div>
+          <h3 style="color:var(--espresso);margin-bottom:16px;">Active Subscriptions</h3>
+          <div id="active-subs-mini"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subscriptions -->
+    <div id="sec-subscriptions" class="dash-section hidden">
+      <div class="flex-between mb-24">
+        <h2 style="color:var(--espresso);">My Subscriptions</h2>
+        <a href="discovery.html" class="btn btn-primary btn-sm">+ Add Tiffin</a>
+      </div>
+      <div id="subs-list"></div>
+    </div>
+
+    <!-- Pause Meals -->
+    <div id="sec-pause" class="dash-section hidden">
+      <h2 style="color:var(--espresso);margin-bottom:8px;">Pause Meals</h2>
+      <p style="margin-bottom:28px;">Toggle off any upcoming meal before the cutoff to skip it. Credit will be added to your subscription.</p>
+      <div id="pause-list"></div>
+    </div>
+
+    <!-- Order History -->
+    <div id="sec-orders" class="dash-section hidden">
+      <h2 style="color:var(--espresso);margin-bottom:24px;">Order History</h2>
+      <div class="card">
+        <div style="padding:0 4px">
+          <table class="data-table">
+            <thead><tr><th>Date</th><th>Provider</th><th>Meal</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody id="order-history-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div id="sec-profile" class="dash-section hidden">
+      <h2 style="color:var(--espresso);margin-bottom:24px;">My Profile</h2>
+      <div style="max-width:500px">
+        <div class="card">
+          <div class="card-body" id="profile-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+const user = Auth.require('student');
+if (!user) throw 0;
+
+// Seed demo subscriptions if none
+let subs = JSON.parse(localStorage.getItem('tiffy_subscriptions')||'[]');
+if (!subs.length) {
+  subs = [
+    { id:'sub1', providerId:'p1', providerName:"Aunty Sharma's Kitchen", plan:'Monthly', status:'active', startDate: new Date(Date.now()-15*86400000).toISOString(), emoji:'🍛', nextRenewal: new Date(Date.now()+15*86400000).toLocaleDateString() },
+    { id:'sub2', providerId:'p2', providerName:'South Tiffin House',      plan:'Weekly',  status:'active', startDate: new Date(Date.now()-3*86400000).toISOString(), emoji:'🥘',  nextRenewal: new Date(Date.now()+4*86400000).toLocaleDateString() },
+  ];
+  localStorage.setItem('tiffy_subscriptions', JSON.stringify(subs));
+}
+
+// Section switcher
+function showSection(name, link) {
+  document.querySelectorAll('.dash-section').forEach(s=>s.classList.add('hidden'));
+  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.remove('hidden');
+  if (link) link.classList.add('active');
+  event && event.preventDefault();
+}
+
+// Greeting
+document.getElementById('user-greeting').innerHTML = `
+  <h2>Good ${getGreeting()}, ${user.name.split(' ')[0]}! 👋</h2>
+  <p>${new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · ${user.hostel||'NIT Jalandhar'}</p>`;
+
+function getGreeting() {
+  const h = new Date().getHours();
+  return h<12?'morning':h<17?'afternoon':'evening';
+}
+
+// Stats
+document.getElementById('stat-cards').innerHTML = `
+  <div class="stat-card"><div class="s-label">Active Subs</div><div class="s-value">${subs.filter(s=>s.status==='active').length}</div><div class="s-change up">↑ Good coverage</div></div>
+  <div class="stat-card"><div class="s-label">Meals This Month</div><div class="s-value">42</div><div class="s-change up">↑ 3 paused</div></div>
+  <div class="stat-card"><div class="s-label">Total Spent</div><div class="s-value">₹2,798</div><div class="s-change">This month</div></div>
+  <div class="stat-card"><div class="s-label">Credits Earned</div><div class="s-value">₹180</div><div class="s-change up">From paused meals</div></div>`;
+
+// Today's meals
+const meals = [
+  { time:'7:30 AM',  meal:'Breakfast Box',    provider:"Aunty Sharma's Kitchen", status:'delivered', icon:'✅' },
+  { time:'12:30 PM', meal:'Lunch Thali',       provider:"Aunty Sharma's Kitchen", status:'on-the-way', icon:'🚴' },
+  { time:'1:00 PM',  meal:'Idli Sambar',       provider:'South Tiffin House',     status:'preparing', icon:'👩‍🍳' },
+];
+document.getElementById('todays-meals').innerHTML = meals.map(m=>`
+  <div class="order-card mb-8" style="margin-bottom:10px">
+    <div class="order-avatar">${m.icon}</div>
+    <div class="order-details">
+      <div class="order-name">${m.meal}</div>
+      <div class="order-meta">${m.provider} · ${m.time}</div>
+    </div>
+    <span class="badge ${m.status==='delivered'?'badge-green':m.status==='on-the-way'?'badge-orange':'badge-gray'}">${m.status==='delivered'?'Delivered':m.status==='on-the-way'?'On the way':'Preparing'}</span>
+  </div>`).join('');
+
+// Active subs mini
+document.getElementById('active-subs-mini').innerHTML = subs.filter(s=>s.status==='active').map(s=>`
+  <div class="order-card" style="margin-bottom:10px;cursor:pointer" onclick="showSection('subscriptions')">
+    <div class="order-avatar">${s.emoji}</div>
+    <div class="order-details">
+      <div class="order-name">${s.providerName}</div>
+      <div class="order-meta">${s.plan} Plan · Renews ${s.nextRenewal||'soon'}</div>
+    </div>
+    <span class="badge badge-green">Active</span>
+  </div>`).join('');
+
+// Full subscriptions list
+document.getElementById('subs-list').innerHTML = subs.length ? subs.map(s=>`
+  <div class="sub-card mb-16" style="margin-bottom:16px">
+    <div class="sub-card-header">
+      <div class="sub-avatar">${s.emoji}</div>
+      <div class="sub-info">
+        <div class="sub-name">${s.providerName}</div>
+        <div class="sub-plan">${s.plan} Plan · Started ${new Date(s.startDate).toLocaleDateString('en-IN')}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="badge ${s.status==='active'?'badge-green':'badge-gray'}">${s.status==='active'?'Active':'Paused'}</span>
+        <button class="btn btn-sm btn-secondary" onclick="cancelSub('${s.id}')">Cancel</button>
+      </div>
+    </div>
+    <div class="sub-card-body">
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--text-light)">
+        <span>Next renewal: <strong style="color:var(--espresso)">${s.nextRenewal||'—'}</strong></span>
+        <a href="provider.html?id=${s.providerId}" style="color:var(--saffron);font-weight:600">View Provider →</a>
+      </div>
+    </div>
+  </div>`) .join('') :
+`<div class="empty-state"><div class="empty-icon">🍽️</div><h3>No Active Subscriptions</h3><p>Find a tiffin provider and subscribe to get started.</p><a href="discovery.html" class="btn btn-primary">Browse Providers</a></div>`;
+
+// Pause meals
+document.getElementById('pause-list').innerHTML = subs.filter(s=>s.status==='active').map(s=>{
+  const mealTypes = ['Breakfast','Lunch','Dinner'];
+  return `
+  <div class="sub-card" style="margin-bottom:20px">
+    <div class="sub-card-header">
+      <div class="sub-avatar">${s.emoji}</div>
+      <div class="sub-info"><div class="sub-name">${s.providerName}</div><div class="sub-plan">${s.plan} Plan</div></div>
+    </div>
+    <div class="sub-card-body">
+      <div style="font-size:0.82rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">Tomorrow's Meals</div>
+      ${mealTypes.map(type => {
+        const canP = canPause(type);
+        const cutoffs = { Breakfast:'7:00 AM', Lunch:'9:00 AM', Dinner:'4:00 PM' };
+        return `<div class="meal-toggle-row">
+          <div>
+            <div class="meal-toggle-label">${type}</div>
+            <div class="meal-toggle-time">Cutoff: ${cutoffs[type]} today</div>
+          </div>
+          <div class="toggle-wrap">
+            ${!canP?`<span class="cutoff-warn">Cutoff passed</span>`:''}
+            <label class="toggle">
+              <input type="checkbox" checked ${!canP?'disabled':''} onchange="toggleMeal('${s.id}','${type}',this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}).join('') || `<div class="empty-state"><div class="empty-icon">⏸️</div><h3>No Active Subscriptions</h3><p>You need an active subscription to pause meals.</p><a href="discovery.html" class="btn btn-primary">Browse Providers</a></div>`;
+
+// Order history
+const historyData = [
+  { date:'Today',      provider:"Aunty Sharma's", meal:'Breakfast Box', amt:'₹45', status:'Delivered' },
+  { date:'Yesterday',  provider:'South Tiffin',   meal:'Lunch (Meals)', amt:'₹90', status:'Delivered' },
+  { date:'Yesterday',  provider:"Aunty Sharma's", meal:'Lunch Thali',   amt:'₹80', status:'Delivered' },
+  { date:'2 days ago', provider:"Aunty Sharma's", meal:'Dinner Thali',  amt:'₹0',  status:'Paused' },
+  { date:'2 days ago', provider:'South Tiffin',   meal:'Idli Sambar',   amt:'₹50', status:'Delivered' },
+  { date:'3 days ago', provider:"Aunty Sharma's", meal:'Lunch Thali',   amt:'₹80', status:'Delivered' },
+];
+document.getElementById('order-history-body').innerHTML = historyData.map(r=>`
+  <tr>
+    <td class="history-date">${r.date}</td>
+    <td class="history-provider">${r.provider}</td>
+    <td>${r.meal}</td>
+    <td style="font-family:var(--font-mono);color:var(--saffron)">${r.amt}</td>
+    <td><span class="badge ${r.status==='Delivered'?'badge-green':'badge-gray'}">${r.status}</span></td>
+  </tr>`).join('');
+
+// Profile
+document.getElementById('profile-content').innerHTML = `
+  <div style="text-align:center;margin-bottom:24px">
+    <div style="width:72px;height:72px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 12px">👨‍🎓</div>
+    <h3 style="color:var(--espresso)">${user.name}</h3>
+    <p style="font-size:0.85rem">${user.email||''}</p>
+  </div>
+  <div class="info-row" style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span>🏠</span><div><strong style="font-size:0.78rem;font-weight:700;color:var(--muted);text-transform:uppercase">Hostel</strong><div style="font-size:0.9rem;color:var(--espresso)">${user.hostel||'—'} ${user.block?'· '+user.block:''}</div></div></div>
+  <div class="info-row" style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><span>🎓</span><div><strong style="font-size:0.78rem;font-weight:700;color:var(--muted);text-transform:uppercase">Roll Number</strong><div style="font-size:0.9rem;color:var(--espresso)">${user.rollNo||user.roll||'—'}</div></div></div>
+  <div class="info-row" style="display:flex;gap:10px;padding:10px 0"><span>📱</span><div><strong style="font-size:0.78rem;font-weight:700;color:var(--muted);text-transform:uppercase">Phone</strong><div style="font-size:0.9rem;color:var(--espresso)">${user.phone||'—'}</div></div></div>
+  <button class="btn btn-secondary btn-sm btn-full mt-24" onclick="Auth.logout()">Logout</button>`;
+
+function toggleMeal(subId, mealType, active) {
+  if (!active) showToast(`${mealType} paused for tomorrow. Credit will be added.`, 'success');
+  else showToast(`${mealType} re-enabled for tomorrow.`, 'info');
+}
+
+function cancelSub(subId) {
+  if (!confirm('Are you sure you want to cancel this subscription? This cannot be undone for the current period.')) return;
+  subs = subs.map(s => s.id===subId ? {...s, status:'cancelled'} : s);
+  localStorage.setItem('tiffy_subscriptions', JSON.stringify(subs));
+  showToast('Subscription cancelled.', 'info');
+  setTimeout(()=>location.reload(), 800);
+}
+</script>
+</body>
+</html>

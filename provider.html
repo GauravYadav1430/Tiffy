@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .provider-hero {
+      background: linear-gradient(135deg, var(--cream) 0%, rgba(232,136,26,0.1) 100%);
+      padding: calc(var(--nav-h) + 40px) 0 0;
+    }
+    .provider-header { display: flex; gap: 32px; align-items: flex-start; padding-bottom: 32px; }
+    .provider-avatar-lg { width: 110px; height: 110px; border-radius: 20px; background: white; border: 3px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; box-shadow: var(--shadow-md); flex-shrink: 0; }
+    .provider-tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 32px; }
+    .tab-btn { padding: 12px 22px; border: none; background: none; font-size: 0.9rem; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all var(--transition); }
+    .tab-btn.active { color: var(--saffron); border-bottom-color: var(--saffron); font-weight: 600; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .plan-toggle { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px; }
+    .plan-opt { text-align: center; padding: 12px; border-radius: 10px; border: 2px solid var(--border); cursor: pointer; transition: all var(--transition); }
+    .plan-opt:hover { border-color: var(--saffron); }
+    .plan-opt.selected { border-color: var(--saffron); background: rgba(232,136,26,0.08); }
+    .plan-opt .p-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .plan-opt .p-price { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600; color: var(--saffron); }
+    .sticky-cta { position: sticky; top: calc(var(--nav-h) + 20px); background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 24px; box-shadow: var(--shadow-sm); }
+    .info-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .icon { font-size: 1.1rem; width: 28px; flex-shrink: 0; }
+    .info-row .text { font-size: 0.88rem; color: var(--text-light); }
+    .info-row .text strong { display: block; font-weight: 600; color: var(--espresso); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
+    .review-card { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .review-card:last-child { border-bottom: none; }
+    .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .reviewer-name { font-weight: 600; font-size: 0.9rem; color: var(--espresso); }
+    .review-date { font-size: 0.78rem; color: var(--muted); }
+    .review-stars { color: var(--saffron); font-size: 0.9rem; margin-bottom: 6px; }
+    .review-text { font-size: 0.88rem; color: var(--text-light); line-height: 1.6; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="discovery.html">Find Tiffin</a><a href="subscriptions.html">Plans</a><a href="about.html">About</a></div>
+    <div class="nav-actions">
+      <a href="cart.html" style="text-decoration:none"><button class="btn-cart">🛒 Cart<span class="cart-badge" style="display:none">0</span></button></a>
+      <button class="btn-nav-login">Login</button>
+    </div>
+  </div>
+</nav>
+
+<div class="provider-hero">
+  <div class="container">
+    <a href="discovery.html" style="font-size:0.85rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;">← Back to Discovery</a>
+    <div class="provider-header" id="provider-header"></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start;">
+      <!-- Main Content -->
+      <div>
+        <div class="provider-tabs">
+          <button class="tab-btn active" onclick="switchTab('menu',this)">Menu</button>
+          <button class="tab-btn" onclick="switchTab('plans',this)">Subscription Plans</button>
+          <button class="tab-btn" onclick="switchTab('reviews',this)">Reviews</button>
+          <button class="tab-btn" onclick="switchTab('info',this)">Info</button>
+        </div>
+
+        <!-- Menu Tab -->
+        <div id="tab-menu" class="tab-panel active">
+          <div id="menu-content"></div>
+        </div>
+
+        <!-- Plans Tab -->
+        <div id="tab-plans" class="tab-panel">
+          <div id="plans-content"></div>
+        </div>
+
+        <!-- Reviews Tab -->
+        <div id="tab-reviews" class="tab-panel">
+          <div id="reviews-content"></div>
+        </div>
+
+        <!-- Info Tab -->
+        <div id="tab-info" class="tab-panel">
+          <div id="info-content"></div>
+        </div>
+      </div>
+
+      <!-- Sticky CTA -->
+      <div class="sticky-cta">
+        <h4 style="color:var(--espresso);margin-bottom:6px;">Subscribe to This Provider</h4>
+        <p style="font-size:0.85rem;margin-bottom:20px;">Choose your plan and get home-cooked meals delivered daily.</p>
+        <div class="plan-toggle" id="sticky-plans"></div>
+        <button class="btn btn-primary btn-full" onclick="subscribeToPlan()">Subscribe Now →</button>
+        <div style="text-align:center;margin-top:12px;font-size:0.78rem;color:var(--muted);">Cancel anytime · Pay via UPI</div>
+        <div style="margin-top:20px;">
+          <div class="info-row"><span class="icon">⏰</span><div class="text"><strong>Cutoff to Pause</strong>9 AM for lunch · 4 PM for dinner</div></div>
+          <div class="info-row"><span class="icon">🔄</span><div class="text"><strong>Auto-Renewal</strong>Subscription renews automatically</div></div>
+          <div class="info-row"><span class="icon">💰</span><div class="text"><strong>Payment</strong>UPI · Card · Net Banking</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Subscribe Modal -->
+<div class="modal-overlay" id="subscribe-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Confirm Subscription</span>
+      <button class="modal-close" onclick="closeModal('subscribe-modal')">×</button>
+    </div>
+    <div id="modal-body"></div>
+    <button class="btn btn-primary btn-full mt-24" onclick="confirmSubscription()">Confirm & Pay →</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="justify-content:center;">
+      <span>© 2025 Tiffy · <a href="index.html" style="color:var(--saffron)">Home</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const pid = params.get('id') || 'p1';
+const provider = getProvider(pid);
+let selectedPlan = 'Monthly';
+
+if (!provider) { document.body.innerHTML = '<div style="padding:100px;text-align:center"><h2>Provider not found</h2><a href="discovery.html">← Back</a></div>'; }
+else { buildPage(); }
+
+function buildPage() {
+  // Header
+  document.title = `${provider.name} — Tiffy`;
+  document.getElementById('provider-header').innerHTML = `
+    <div class="provider-avatar-lg">${provider.emoji}</div>
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+        <h2 style="font-size:1.7rem;color:var(--espresso);margin:0">${provider.name}</h2>
+        <span class="badge ${provider.isOpen?'badge-green':'badge-gray'}">${provider.isOpen?'● Open Now':'● Closed'}</span>
+        <span class="badge ${provider.isVeg?'badge-green':'badge-orange'}">${provider.isVeg?'Pure Veg':'Non-Veg'}</span>
+      </div>
+      <div style="font-size:0.9rem;color:var(--muted);margin-bottom:10px;">By ${provider.owner} · ${provider.area}</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.88rem;color:var(--text-light);">
+        <span>★ <strong>${provider.rating}</strong> (${provider.reviews} reviews)</span>
+        <span>🍽️ ${provider.cuisine}</span>
+        <span>⏰ Delivers: ${provider.deliveryTime}</span>
+        <span>💰 From ₹${provider.priceFrom}/meal</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+        ${provider.plans.map(p=>`<span class="provider-tag tag-plan">${p}</span>`).join('')}
+      </div>
+    </div>`;
+
+  // Menu
+  const cats = [...new Set(provider.meals.map(m => m.category))];
+  document.getElementById('menu-content').innerHTML = cats.map(cat => `
+    <div class="menu-section">
+      <div class="menu-section-title">${cat}</div>
+      ${provider.meals.filter(m=>m.category===cat).map(m=>`
+        <div class="meal-row">
+          <div class="meal-info">
+            <div class="meal-name">${m.name}</div>
+            <div class="meal-desc">${m.desc}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;flex-shrink:0">
+            <span class="meal-price">₹${m.price}</span>
+            <button class="btn btn-sm btn-primary" onclick='Cart.add({id:"${m.id}",name:"${m.name}",price:${m.price},provider:"${provider.name}"})'>+ Add</button>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+
+  // Plans
+  const planData = {
+    Daily:   { price: provider.priceFrom * 2 + ' / day', sub: '2 meals per day', desc: 'Best for trying out. Charged per day.', features: ['Lunch + Dinner', 'No commitment', 'Pause anytime'] },
+    Weekly:  { price: '₹' + Math.round(provider.priceMonthly * 0.28), sub: '/ week', desc: '7-day subscription. Save 10% vs daily.', features: ['All 3 meals', 'Pause meals', 'Auto-renews weekly'] },
+    Monthly: { price: '₹' + provider.priceMonthly, sub: '/ month', desc: 'Best value. Save up to 20% vs daily.', features: ['All 3 meals', 'Pause anytime', 'Priority delivery', 'Subscription credit for paused meals'] }
+  };
+  document.getElementById('plans-content').innerHTML = `
+    <div class="plan-cards">
+      ${provider.plans.map((pl,i) => {
+        const d = planData[pl] || planData.Monthly;
+        return `<div class="plan-card ${i===2||provider.plans.length===1?'featured':''}" style="cursor:pointer" onclick="selectPlan('${pl}',this)">
+          ${(i===2||provider.plans.length===1)?'<span class="plan-badge">Best Value</span>':''}
+          <div class="plan-name">${pl}</div>
+          <div class="plan-price"><span class="amount">${d.price}</span><span class="period"> ${d.sub}</span></div>
+          <p class="plan-meals">${d.desc}</p>
+          <div class="plan-features">${d.features.map(f=>`<div class="plan-feature"><span class="check">✓</span>${f}</div>`).join('')}</div>
+          <button class="btn btn-primary btn-full btn-sm" onclick="event.stopPropagation();selectAndSubscribe('${pl}')">Choose ${pl}</button>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // Sticky plan selector
+  document.getElementById('sticky-plans').innerHTML = provider.plans.map((pl,i) => {
+    const d = planData[pl] || planData.Monthly;
+    return `<div class="plan-opt ${i===provider.plans.length-1?'selected':''}" onclick="selectStickyPlan('${pl}',this)">
+      <div class="p-label">${pl}</div>
+      <div class="p-price">${d.price.replace('₹','₹').split('/')[0]}</div>
+    </div>`;
+  }).join('');
+  selectedPlan = provider.plans[provider.plans.length-1];
+
+  // Reviews
+  const reviews = [
+    { name:'Rahul K.', rating:5, date:'2 days ago', text:`${provider.name} is absolutely amazing! Food is fresh, delivery on time.` },
+    { name:'Sneha M.', rating:5, date:'1 week ago', text:'Tastes just like home. The monthly plan is incredible value.' },
+    { name:'Aakash T.', rating:4, date:'2 weeks ago', text:'Very consistent. Had to pause a couple of times and the credit system worked perfectly.' },
+    { name:'Divya R.', rating:5, date:'3 weeks ago', text:'Highly recommend the monthly subscription. The thali is generous and always tasty.' },
+  ];
+  document.getElementById('reviews-content').innerHTML = `
+    <div style="display:flex;gap:32px;align-items:center;padding:24px;background:var(--cream);border-radius:var(--radius);margin-bottom:28px;">
+      <div style="text-align:center;flex-shrink:0">
+        <div style="font-family:var(--font-display);font-size:3.5rem;font-weight:900;color:var(--saffron)">${provider.rating}</div>
+        <div style="color:var(--saffron);font-size:1.2rem">${'★'.repeat(Math.floor(provider.rating))}</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:4px">${provider.reviews} reviews</div>
+      </div>
+      <div style="flex:1">
+        ${[5,4,3,2,1].map(s=>`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span style="font-size:0.8rem;width:8px;color:var(--muted)">${s}</span>
+            <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+              <div style="height:100%;background:var(--saffron);border-radius:4px;width:${s===5?70:s===4?20:s===3?7:3}%"></div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+    ${reviews.map(r=>`
+      <div class="review-card">
+        <div class="review-header"><span class="reviewer-name">${r.name}</span><span class="review-date">${r.date}</span></div>
+        <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+        <p class="review-text">${r.text}</p>
+      </div>`).join('')}`;
+
+  // Info
+  document.getElementById('info-content').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div class="card"><div class="card-body">
+        <h4 style="color:var(--espresso);margin-bottom:16px">Provider Details</h4>
+        <div class="info-row"><span class="icon">👩‍🍳</span><div class="text"><strong>Provider</strong>${provider.owner}</div></div>
+        <div class="info-row"><span class="icon">📍</span><div class="text"><strong>Location</strong>${provider.area}</div></div>
+        <div class="info-row"><span class="icon">🍽️</span><div class="text"><strong>Cuisine</strong>${provider.cuisine}</div></div>
+        <div class="info-row"><span class="icon">⏰</span><div class="text"><strong>Delivery Times</strong>${provider.deliveryTime}</div></div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <h4 style="color:var(--espresso);margin-bottom:16px">Subscription Rules</h4>
+        <div class="info-row"><span class="icon">⏸️</span><div class="text"><strong>Meal Pause Cutoff</strong>9:00 AM for lunch, 4:00 PM for dinner, 7:00 AM for breakfast</div></div>
+        <div class="info-row"><span class="icon">🔄</span><div class="text"><strong>Credit Policy</strong>Paused meal credit auto-applied to subscription extension</div></div>
+        <div class="info-row"><span class="icon">❌</span><div class="text"><strong>Cancellation</strong>Cancel anytime from dashboard. No refunds on active period.</div></div>
+      </div></div>
+    </div>`;
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function selectStickyPlan(plan, el) {
+  document.querySelectorAll('.plan-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPlan = plan;
+}
+
+function selectPlan(plan, el) {
+  document.querySelectorAll('.plan-card').forEach(e=>e.style.borderColor='');
+  el.style.borderColor = 'var(--saffron)';
+  selectedPlan = plan;
+}
+
+function selectAndSubscribe(plan) {
+  selectedPlan = plan;
+  subscribeToPlan();
+}
+
+function subscribeToPlan() {
+  if (!Auth.get()) {
+    showToast('Please login to subscribe', 'info');
+    setTimeout(()=>window.location.href='login.html?next='+encodeURIComponent(location.href),1000);
+    return;
+  }
+  document.getElementById('modal-body').innerHTML = `
+    <div style="background:var(--cream);border-radius:12px;padding:18px;margin-bottom:16px">
+      <div style="font-weight:600;color:var(--espresso);margin-bottom:4px">${provider.name}</div>
+      <div style="font-size:0.85rem;color:var(--muted)">${selectedPlan} Subscription</div>
+    </div>
+    <div class="summary-row"><span>Plan</span><span>${selectedPlan}</span></div>
+    <div class="summary-row"><span>Amount</span><span style="color:var(--saffron);font-family:var(--font-mono)">₹${selectedPlan==='Monthly'?provider.priceMonthly:selectedPlan==='Weekly'?Math.round(provider.priceMonthly*0.28):provider.priceFrom*2}/period</span></div>
+    <div class="summary-row"><span>Delivery</span><span>${provider.deliveryTime}</span></div>
+    <div style="margin:16px 0"><label class="form-label">Payment Method</label>
+      <select class="form-control"><option>UPI (PhonePe, GPay, Paytm)</option><option>Credit / Debit Card</option><option>Net Banking</option></select>
+    </div>`;
+  openModal('subscribe-modal');
+}
+
+function confirmSubscription() {
+  const user = Auth.get();
+  const subs = JSON.parse(localStorage.getItem('tiffy_subscriptions')||'[]');
+  subs.push({ id:'sub'+Date.now(), providerId:provider.id, providerName:provider.name, plan:selectedPlan, status:'active', startDate:new Date().toISOString(), emoji:provider.emoji });
+  localStorage.setItem('tiffy_subscriptions', JSON.stringify(subs));
+  closeModal('subscribe-modal');
+  showToast(`Subscribed to ${provider.name}!`, 'success');
+  setTimeout(()=>window.location.href='student-dashboard.html',1500);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+</script>
+</body>
+</html>

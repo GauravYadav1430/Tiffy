@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Tiffin — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .discovery-header { background: linear-gradient(135deg,var(--cream) 0%,rgba(232,136,26,0.08) 100%); padding: calc(var(--nav-h) + 48px) 0 40px; border-bottom: 1px solid var(--border); }
+    .filter-sidebar { width: 260px; flex-shrink: 0; }
+    .filter-panel { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 24px; box-shadow: var(--shadow-sm); position: sticky; top: calc(var(--nav-h) + 20px); }
+    .filter-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .filter-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .filter-section h5 { font-size: 0.85rem; font-weight: 700; color: var(--espresso); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+    .check-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; }
+    .check-item input[type=checkbox] { accent-color: var(--saffron); width: 16px; height: 16px; cursor: pointer; }
+    .check-item label { font-size: 0.88rem; color: var(--text-light); cursor: pointer; flex: 1; }
+    .count-badge { background: var(--cream); color: var(--muted); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+    .results-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .results-count { font-size: 0.88rem; color: var(--muted); }
+    .sort-select { padding: 8px 14px; border: 1.5px solid var(--border-dark); border-radius: 8px; font-size: 0.85rem; color: var(--text); outline: none; background: white; }
+    .sort-select:focus { border-color: var(--saffron); }
+    .no-results { text-align: center; padding: 60px; color: var(--muted); }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="discovery.html" class="active">Find Tiffin</a><a href="subscriptions.html">Plans</a><a href="about.html">About</a></div>
+    <div class="nav-actions">
+      <a href="cart.html" style="text-decoration:none"><button class="btn-cart">🛒 Cart<span class="cart-badge" style="display:none">0</span></button></a>
+      <button class="btn-nav-login">Login</button>
+    </div>
+  </div>
+</nav>
+
+<div class="discovery-header">
+  <div class="container">
+    <h1 style="font-size:2rem;margin-bottom:8px;">Find Your Perfect <span style="color:var(--saffron);font-style:italic">Tiffin</span></h1>
+    <p style="margin-bottom:24px;">Discover home-cooked meals from trusted local providers near NIT Jalandhar</p>
+    <div class="search-wrap" style="max-width:520px;">
+      <input type="text" id="search-input" placeholder="Search providers, cuisines, dishes…">
+      <button class="search-btn" onclick="applyFilters()">🔍 Search</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+
+      <!-- Sidebar Filters -->
+      <div class="filter-sidebar">
+        <div class="filter-panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h4 style="color:var(--espresso);">Filters</h4>
+            <button onclick="clearFilters()" style="font-size:0.8rem;color:var(--saffron);background:none;border:none;cursor:pointer;font-weight:600;">Clear All</button>
+          </div>
+
+          <div class="filter-section">
+            <h5>Availability</h5>
+            <div class="check-item"><input type="checkbox" id="f-open" onchange="applyFilters()"><label for="f-open">Open Now</label></div>
+          </div>
+
+          <div class="filter-section">
+            <h5>Food Type</h5>
+            <div class="check-item"><input type="checkbox" id="f-veg" onchange="applyFilters()"><label for="f-veg">Veg Only</label></div>
+            <div class="check-item"><input type="checkbox" id="f-nonveg" onchange="applyFilters()"><label for="f-nonveg">Non-Veg Available</label></div>
+          </div>
+
+          <div class="filter-section">
+            <h5>Plan Type</h5>
+            <div class="check-item"><input type="checkbox" id="f-daily" onchange="applyFilters()"><label for="f-daily">Daily</label></div>
+            <div class="check-item"><input type="checkbox" id="f-weekly" onchange="applyFilters()"><label for="f-weekly">Weekly</label></div>
+            <div class="check-item"><input type="checkbox" id="f-monthly" onchange="applyFilters()"><label for="f-monthly">Monthly</label></div>
+          </div>
+
+          <div class="filter-section">
+            <h5>Cuisine</h5>
+            <div class="check-item"><input type="checkbox" id="f-north" onchange="applyFilters()"><label for="f-north">North Indian</label></div>
+            <div class="check-item"><input type="checkbox" id="f-south" onchange="applyFilters()"><label for="f-south">South Indian</label></div>
+            <div class="check-item"><input type="checkbox" id="f-punjabi" onchange="applyFilters()"><label for="f-punjabi">Punjabi</label></div>
+            <div class="check-item"><input type="checkbox" id="f-multi" onchange="applyFilters()"><label for="f-multi">Multi-Cuisine</label></div>
+          </div>
+
+          <div class="filter-section">
+            <h5>Budget (per month)</h5>
+            <div style="padding:8px 0;">
+              <input type="range" id="f-price" min="999" max="1800" value="1800" style="width:100%;accent-color:var(--saffron);" oninput="document.getElementById('price-val').textContent='₹'+this.value;applyFilters()">
+              <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--muted);margin-top:4px;"><span>₹999</span><span id="price-val">₹1800</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div style="flex:1;min-width:0;">
+        <div class="results-bar">
+          <span class="results-count" id="results-count">Loading providers…</span>
+          <select class="sort-select" id="sort-select" onchange="applyFilters()">
+            <option value="rating">Sort: Top Rated</option>
+            <option value="price">Sort: Price Low to High</option>
+            <option value="reviews">Sort: Most Reviewed</option>
+          </select>
+        </div>
+        <div class="providers-grid" id="providers-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="justify-content:center;border-top:1px solid rgba(255,255,255,0.1);padding-top:24px;">
+      <span>© 2025 Tiffy · <a href="index.html" style="color:var(--saffron);">Home</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+function getFilters() {
+  return {
+    query: document.getElementById('search-input').value.toLowerCase().trim(),
+    open:    document.getElementById('f-open').checked,
+    veg:     document.getElementById('f-veg').checked,
+    nonveg:  document.getElementById('f-nonveg').checked,
+    daily:   document.getElementById('f-daily').checked,
+    weekly:  document.getElementById('f-weekly').checked,
+    monthly: document.getElementById('f-monthly').checked,
+    north:   document.getElementById('f-north').checked,
+    south:   document.getElementById('f-south').checked,
+    punjabi: document.getElementById('f-punjabi').checked,
+    multi:   document.getElementById('f-multi').checked,
+    maxPrice: parseInt(document.getElementById('f-price').value),
+    sort:    document.getElementById('sort-select').value
+  };
+}
+
+function applyFilters() {
+  const f = getFilters();
+  let results = [...PROVIDERS];
+
+  if (f.query) results = results.filter(p =>
+    p.name.toLowerCase().includes(f.query) ||
+    p.cuisine.toLowerCase().includes(f.query) ||
+    p.area.toLowerCase().includes(f.query) ||
+    p.meals.some(m => m.name.toLowerCase().includes(f.query))
+  );
+  if (f.open)    results = results.filter(p => p.isOpen);
+  if (f.veg)     results = results.filter(p => p.isVeg);
+  if (f.nonveg)  results = results.filter(p => !p.isVeg);
+  if (f.daily)   results = results.filter(p => p.plans.includes('Daily'));
+  if (f.weekly)  results = results.filter(p => p.plans.includes('Weekly'));
+  if (f.monthly) results = results.filter(p => p.plans.includes('Monthly'));
+  if (f.north)   results = results.filter(p => p.cuisine.includes('North'));
+  if (f.south)   results = results.filter(p => p.cuisine.includes('South'));
+  if (f.punjabi) results = results.filter(p => p.cuisine.includes('Punjabi'));
+  if (f.multi)   results = results.filter(p => p.cuisine.includes('Multi'));
+  results = results.filter(p => p.priceMonthly <= f.maxPrice);
+
+  if (f.sort === 'rating')  results.sort((a,b) => b.rating - a.rating);
+  if (f.sort === 'price')   results.sort((a,b) => a.priceMonthly - b.priceMonthly);
+  if (f.sort === 'reviews') results.sort((a,b) => b.reviews - a.reviews);
+
+  renderProviders(results);
+}
+
+function clearFilters() {
+  document.querySelectorAll('.filter-panel input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('f-price').value = 1800;
+  document.getElementById('price-val').textContent = '₹1800';
+  document.getElementById('search-input').value = '';
+  document.getElementById('sort-select').value = 'rating';
+  applyFilters();
+}
+
+function renderProviders(list) {
+  const grid = document.getElementById('providers-grid');
+  document.getElementById('results-count').textContent = `${list.length} provider${list.length !== 1 ? 's' : ''} found`;
+  if (!list.length) {
+    grid.innerHTML = `<div class="no-results" style="grid-column:1/-1"><div style="font-size:3rem;margin-bottom:12px;">🍽️</div><h3>No providers match your filters</h3><p>Try removing some filters or expanding your search.</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+  <div class="card provider-card fade-in">
+    <div class="thumb">
+      <div style="background:linear-gradient(135deg,rgba(232,136,26,0.15),rgba(201,107,0,0.08));height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;">${p.emoji}</div>
+      <span class="tag ${p.isVeg?'veg':''}">${p.isVeg?'Pure Veg':'Non-Veg'}</span>
+      ${!p.isOpen?'<span class="tag closed" style="left:auto;right:12px">Temporarily Closed</span>':''}
+    </div>
+    <div class="card-body">
+      <div class="provider-info">
+        <span class="provider-name">${p.name}</span>
+        <span class="provider-rating">★ ${p.rating} <span style="color:var(--muted);font-weight:400">(${p.reviews})</span></span>
+      </div>
+      <div class="provider-meta">📍 ${p.area}</div>
+      <div class="provider-meta" style="margin-top:2px;">⏰ ${p.deliveryTime}</div>
+      <div class="provider-tags" style="margin-top:10px;">
+        <span class="provider-tag tag-cuisine">${p.cuisine}</span>
+        ${p.plans.map(pl=>`<span class="provider-tag tag-plan">${pl}</span>`).join('')}
+      </div>
+      <div class="flex-between" style="margin-top:14px;">
+        <div>
+          <span class="price-range">From <strong>₹${p.priceFrom}</strong>/meal</span>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:2px;">₹${p.priceMonthly}/month</div>
+        </div>
+        <a href="provider.html?id=${p.id}" class="btn btn-sm ${p.isOpen?'btn-primary':'btn-secondary'}">${p.isOpen?'View Menu':'See Details'}</a>
+      </div>
+    </div>
+  </div>`).join('');
+  initAnimations();
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') applyFilters(); });
+applyFilters();
+</script>
+</body>
+</html>

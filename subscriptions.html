@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Plans — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .compare-table { width:100%; border-collapse:collapse; background:white; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-sm); border:1px solid var(--border); }
+    .compare-table th { background:var(--cream); padding:14px 20px; text-align:center; font-size:0.82rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-light); }
+    .compare-table th:first-child { text-align:left; }
+    .compare-table td { padding:14px 20px; font-size:0.88rem; color:var(--text-light); border-bottom:1px solid var(--border); text-align:center; }
+    .compare-table td:first-child { text-align:left; font-weight:500; color:var(--espresso); }
+    .compare-table tr:last-child td { border-bottom:none; }
+    .check-green { color:var(--green); font-weight:700; }
+    .cross-red   { color:var(--red); }
+    .faq-item { border-bottom:1px solid var(--border); }
+    .faq-item:last-child { border-bottom:none; }
+    .faq-q { display:flex; justify-content:space-between; align-items:center; padding:20px 0; cursor:pointer; font-weight:600; color:var(--espresso); }
+    .faq-q .arrow { transition:transform 0.3s; font-size:0.9rem; color:var(--muted); }
+    .faq-item.open .faq-q .arrow { transform:rotate(180deg); }
+    .faq-a { max-height:0; overflow:hidden; transition:max-height 0.35s ease; font-size:0.9rem; color:var(--text-light); line-height:1.7; }
+    .faq-item.open .faq-a { max-height:200px; padding-bottom:16px; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="discovery.html">Find Tiffin</a><a href="subscriptions.html" class="active">Plans</a><a href="about.html">About</a></div>
+    <div class="nav-actions">
+      <a href="cart.html" style="text-decoration:none"><button class="btn-cart">🛒 Cart<span class="cart-badge" style="display:none">0</span></button></a>
+      <button class="btn-nav-login">Login</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div style="background:linear-gradient(135deg,var(--cream) 0%,rgba(232,136,26,0.1) 100%);padding:calc(var(--nav-h)+60px) 0 60px;text-align:center">
+  <div class="container">
+    <div style="display:inline-block;background:rgba(232,136,26,0.12);color:var(--turmeric);border:1px solid rgba(232,136,26,0.3);padding:6px 16px;border-radius:40px;font-size:0.8rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">Flexible & Affordable</div>
+    <h1 style="color:var(--espresso);margin-bottom:16px">Choose Your <span style="color:var(--saffron);font-style:italic">Meal Plan</span></h1>
+    <p style="max-width:480px;margin:0 auto 40px;font-size:1.05rem;line-height:1.7">Subscribe to a plan that fits your schedule. All plans include the pause feature — skip any meal before the cutoff and get your money back as credit.</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:0.88rem;color:var(--muted)">Pricing varies by provider. These are typical ranges:</span>
+    </div>
+  </div>
+</div>
+
+<!-- Plan Cards -->
+<div class="section">
+  <div class="container">
+    <div class="plan-cards">
+      <!-- Daily -->
+      <div class="plan-card">
+        <div class="plan-name">Daily</div>
+        <div class="plan-price">
+          <span class="amount">₹60–90</span>
+          <span class="period"> / meal</span>
+        </div>
+        <p class="plan-meals">Per meal, billed daily. Best for trying out a new provider.</p>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="check">✓</span>Choose lunch or dinner</div>
+          <div class="plan-feature"><span class="check">✓</span>No commitment</div>
+          <div class="plan-feature"><span class="check">✓</span>Pause anytime</div>
+          <div class="plan-feature" style="opacity:0.4"><span>–</span>No subscription discount</div>
+          <div class="plan-feature" style="opacity:0.4"><span>–</span>Credit rollover</div>
+        </div>
+        <a href="discovery.html" class="btn btn-secondary btn-full btn-sm">Browse Providers</a>
+      </div>
+
+      <!-- Weekly -->
+      <div class="plan-card">
+        <div class="plan-name">Weekly</div>
+        <div class="plan-price">
+          <span class="amount">₹350–550</span>
+          <span class="period"> / week</span>
+        </div>
+        <p class="plan-meals">7-day subscription. ~10% savings vs daily.</p>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="check">✓</span>All 3 meals</div>
+          <div class="plan-feature"><span class="check">✓</span>Pause any meal</div>
+          <div class="plan-feature"><span class="check">✓</span>~10% discount</div>
+          <div class="plan-feature"><span class="check">✓</span>Credit rollover</div>
+          <div class="plan-feature" style="opacity:0.4"><span>–</span>Priority delivery</div>
+        </div>
+        <a href="discovery.html" class="btn btn-secondary btn-full btn-sm">Browse Providers</a>
+      </div>
+
+      <!-- Monthly -->
+      <div class="plan-card featured">
+        <span class="plan-badge">Most Popular</span>
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price">
+          <span class="amount">₹1,199–1,699</span>
+          <span class="period"> / month</span>
+        </div>
+        <p class="plan-meals">30-day subscription. Up to 20% savings. Best value.</p>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="check">✓</span>All 3 meals daily</div>
+          <div class="plan-feature"><span class="check">✓</span>Pause any meal anytime</div>
+          <div class="plan-feature"><span class="check">✓</span>Up to 20% discount</div>
+          <div class="plan-feature"><span class="check">✓</span>Credit rollover</div>
+          <div class="plan-feature"><span class="check">✓</span>Priority delivery</div>
+        </div>
+        <a href="discovery.html" class="btn btn-primary btn-full btn-sm">Browse Providers →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feature Comparison -->
+<div class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="section-header text-center">
+      <div class="eyebrow">Compare</div>
+      <h2>Plan Comparison</h2>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Daily</th>
+          <th>Weekly</th>
+          <th>Monthly</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>All 3 meals (B+L+D)</td><td class="cross-red">✕</td><td class="check-green">✓</td><td class="check-green">✓</td></tr>
+        <tr><td>Pause individual meals</td><td class="check-green">✓</td><td class="check-green">✓</td><td class="check-green">✓</td></tr>
+        <tr><td>Credit for paused meals</td><td class="cross-red">✕</td><td class="check-green">✓</td><td class="check-green">✓</td></tr>
+        <tr><td>Subscription discount</td><td class="cross-red">None</td><td>~10%</td><td>Up to 20%</td></tr>
+        <tr><td>Priority delivery</td><td class="cross-red">✕</td><td class="cross-red">✕</td><td class="check-green">✓</td></tr>
+        <tr><td>Auto-renewal</td><td class="cross-red">✕</td><td class="check-green">✓</td><td class="check-green">✓</td></tr>
+        <tr><td>Cancellation</td><td>Anytime</td><td>Anytime</td><td>Anytime</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Pause Policy -->
+<div class="section">
+  <div class="container">
+    <div class="grid-2" style="align-items:center;gap:60px">
+      <div>
+        <div class="section-header" style="margin-bottom:24px">
+          <div class="eyebrow">Pause Policy</div>
+          <h2>Skip Any Meal, No Questions Asked</h2>
+        </div>
+        <p style="margin-bottom:20px;line-height:1.8">Going home for the weekend? Have a late-night outing? Pause your meal before the cutoff time and the cost gets credited back to your subscription — effectively extending it by one day.</p>
+        <div style="background:var(--cream);border-radius:var(--radius);padding:24px">
+          <h4 style="color:var(--espresso);margin-bottom:16px">Cutoff Times</h4>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            ${[['🌅 Breakfast','7:00 AM same day'],['☀️ Lunch','9:00 AM same day'],['🌙 Dinner','4:00 PM same day']].map(([m,t])=>`
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:white;border-radius:10px;border:1px solid var(--border)">
+              <span style="font-weight:600;color:var(--espresso)">${m}</span>
+              <span style="font-family:var(--font-mono);color:var(--saffron);font-size:0.9rem">${t}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div style="font-size:7rem;text-align:center;line-height:1.3">⏸️<br><span style="font-family:var(--font-display);font-size:1.8rem;color:var(--espresso)">Pause.<br>Save. Extend.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section" style="background:var(--cream)">
+  <div class="container" style="max-width:720px">
+    <div class="section-header text-center">
+      <div class="eyebrow">FAQ</div>
+      <h2>Common Questions</h2>
+    </div>
+    <div id="faq-list"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="wordmark">Tiffy.</div><p>Home-cooked meals for hostel residents. NIT Jalandhar campus.</p></div>
+      <div class="footer-col"><h5>Students</h5><a href="discovery.html">Find Providers</a><a href="subscriptions.html">Meal Plans</a><a href="student-dashboard.html">Dashboard</a></div>
+      <div class="footer-col"><h5>Providers</h5><a href="register.html?role=provider">Join as Provider</a><a href="provider-dashboard.html">Provider Hub</a></div>
+      <div class="footer-col"><h5>Support</h5><a href="about.html">About</a><a href="#">Help & FAQ</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Tiffy · NIT Jalandhar IS&S Lab</span></div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+const faqs = [
+  { q:'Can I subscribe to multiple tiffin providers?', a:'Yes! You can have active subscriptions with multiple providers simultaneously. For example, one for breakfast and another for lunch and dinner.' },
+  { q:'What happens to my credit when I pause a meal?', a:'When you successfully pause a meal before the cutoff, the meal\'s cost is credited back to your account. This credit automatically extends your subscription by one day.' },
+  { q:'Can I cancel my subscription at any time?', a:'Yes, you can cancel anytime from your student dashboard. Cancellation takes effect from the next billing cycle — you will continue to receive meals for the current paid period.' },
+  { q:'How are payments handled?', a:'Subscription payments are collected in advance via UPI, credit/debit card, or net banking. We use secure third-party payment gateways. Tiffy does not store your payment credentials.' },
+  { q:'What if a provider cancels on a particular day?', a:'If a provider marks a day as unavailable, subscribed students are automatically notified and receive full credit for that day\'s meals, extending their subscription accordingly.' },
+  { q:'Is there a minimum commitment period?', a:'Daily plans have no commitment. Weekly and Monthly plans run for their respective period and then auto-renew, but can be cancelled before renewal at any time from the dashboard.' },
+];
+
+document.getElementById('faq-list').innerHTML = `<div class="card"><div class="card-body" style="padding:0 8px">${faqs.map((f,i)=>`
+  <div class="faq-item" id="faq${i}">
+    <div class="faq-q" onclick="toggleFaq(${i})">
+      <span>${f.q}</span><span class="arrow">▼</span>
+    </div>
+    <div class="faq-a">${f.a}</div>
+  </div>`).join('')}</div></div>`;
+
+function toggleFaq(i) {
+  const el = document.getElementById('faq'+i);
+  el.classList.toggle('open');
+}
+</script>
+</body>
+</html>

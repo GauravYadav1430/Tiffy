@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Dashboard — Tiffy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .delivery-card { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:18px 22px; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow-sm); margin-bottom:10px; }
+    .delivery-num { font-family:var(--font-mono); font-size:0.78rem; color:var(--muted); width:24px; flex-shrink:0; }
+    .delivery-info { flex:1; }
+    .delivery-name { font-weight:600; color:var(--espresso); font-size:0.9rem; }
+    .delivery-meta { font-size:0.78rem; color:var(--muted); }
+    .menu-item-row { display:flex; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); }
+    .menu-item-row:last-child { border-bottom:none; }
+    .item-name { flex:1; font-weight:500; color:var(--espresso); }
+    .item-price { font-family:var(--font-mono); color:var(--saffron); width:60px; }
+    .item-toggle { flex-shrink:0; }
+    .chart-bar-wrap { display:flex; align-items:flex-end; gap:6px; height:100px; }
+    .chart-bar { flex:1; background:var(--saffron); border-radius:4px 4px 0 0; min-width:20px; transition:height 0.5s ease; opacity:0.85; }
+    .chart-bar:hover { opacity:1; }
+    .chart-labels { display:flex; gap:6px; margin-top:6px; }
+    .chart-label { flex:1; text-align:center; font-size:0.7rem; color:var(--muted); }
+    .weekly-data { background:var(--cream); border-radius:var(--radius); padding:20px; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="nav-logo">Tiffy<span>.</span></a>
+    <div class="nav-links"><a href="index.html">Home</a></div>
+    <div class="nav-actions">
+      <button class="btn-nav-login" onclick="Auth.logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <div class="sidebar">
+    <div class="sidebar-logo">Provider Hub</div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Dashboard</div>
+      <a href="#" class="sidebar-link active" onclick="showSection('overview',this)"><span class="icon">🏠</span> Overview</a>
+      <a href="#" class="sidebar-link" onclick="showSection('orders',this)"><span class="icon">📦</span> Today's Orders</a>
+      <a href="#" class="sidebar-link" onclick="showSection('menu',this)"><span class="icon">🍽️</span> Manage Menu</a>
+      <a href="#" class="sidebar-link" onclick="showSection('subscribers',this)"><span class="icon">👥</span> Subscribers</a>
+      <a href="#" class="sidebar-link" onclick="showSection('earnings',this)"><span class="icon">💰</span> Earnings</a>
+      <a href="#" class="sidebar-link" onclick="showSection('profile',this)"><span class="icon">⚙️</span> Settings</a>
+    </div>
+    <div style="padding:24px;margin-top:auto;">
+      <button class="btn btn-sm" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);width:100%" onclick="Auth.logout()">← Logout</button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="dash-header" id="provider-greeting"></div>
+
+    <!-- Overview -->
+    <div id="sec-overview" class="dash-section">
+      <div class="stat-cards" id="p-stat-cards"></div>
+      <div class="grid-2">
+        <div>
+          <h3 style="color:var(--espresso);margin-bottom:16px;">Today's Delivery Summary</h3>
+          <div style="background:white;border-radius:var(--radius);border:1px solid var(--border);padding:20px;box-shadow:var(--shadow-sm)">
+            <div id="meal-summary"></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="color:var(--espresso);margin-bottom:16px;">Orders This Week</h3>
+          <div class="weekly-data">
+            <div class="chart-bar-wrap" id="week-chart"></div>
+            <div class="chart-labels" id="week-labels"></div>
+          </div>
+          <div style="margin-top:12px;font-size:0.85rem;color:var(--muted)">Total this week: <strong style="color:var(--espresso)">187 meals</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's Orders -->
+    <div id="sec-orders" class="dash-section hidden">
+      <div class="flex-between mb-24">
+        <div>
+          <h2 style="color:var(--espresso)">Today's Delivery List</h2>
+          <p style="font-size:0.85rem">Print or export this list for delivery.</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Print</button>
+          <button class="btn btn-primary btn-sm" onclick="exportCSV()">⬇️ Export CSV</button>
+        </div>
+      </div>
+      <!-- Meal tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px">
+        <button class="chip active" onclick="filterDeliveries('all',this)">All (34)</button>
+        <button class="chip" onclick="filterDeliveries('Breakfast',this)">Breakfast (12)</button>
+        <button class="chip" onclick="filterDeliveries('Lunch',this)">Lunch (14)</button>
+        <button class="chip" onclick="filterDeliveries('Dinner',this)">Dinner (8)</button>
+      </div>
+      <div id="delivery-list"></div>
+    </div>
+
+    <!-- Menu Management -->
+    <div id="sec-menu" class="dash-section hidden">
+      <div class="flex-between mb-24">
+        <h2 style="color:var(--espresso)">Manage Menu</h2>
+        <button class="btn btn-primary btn-sm" onclick="openAddItem()">+ Add Item</button>
+      </div>
+      <div id="menu-manager"></div>
+    </div>
+
+    <!-- Subscribers -->
+    <div id="sec-subscribers" class="dash-section hidden">
+      <h2 style="color:var(--espresso);margin-bottom:8px;">Active Subscribers</h2>
+      <p style="margin-bottom:24px;">Students currently subscribed to your tiffin service.</p>
+      <div class="card">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Student Name</th><th>Hostel / Block</th><th>Plan</th><th>Phone</th><th>Status</th></tr></thead>
+          <tbody id="subscriber-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Earnings -->
+    <div id="sec-earnings" class="dash-section hidden">
+      <h2 style="color:var(--espresso);margin-bottom:24px;">Earnings</h2>
+      <div class="stat-cards">
+        <div class="stat-card"><div class="s-label">This Month</div><div class="s-value">₹18,450</div><div class="s-change up">↑ 12% vs last month</div></div>
+        <div class="stat-card"><div class="s-label">This Week</div><div class="s-value">₹4,280</div><div class="s-change up">↑ 8%</div></div>
+        <div class="stat-card"><div class="s-label">Pending Payout</div><div class="s-value">₹6,200</div><div class="s-change">Payout on 1st</div></div>
+        <div class="stat-card"><div class="s-label">Total Subscribers</div><div class="s-value">34</div><div class="s-change up">↑ 3 new</div></div>
+      </div>
+      <div class="card mt-24">
+        <div class="card-body">
+          <h4 style="color:var(--espresso);margin-bottom:20px">Monthly Earnings Breakdown</h4>
+          <table class="data-table">
+            <thead><tr><th>Month</th><th>Meals Delivered</th><th>Subscribers</th><th>Revenue</th><th>Platform Fee (5%)</th><th>Net Payout</th></tr></thead>
+            <tbody>
+              ${[['Apr 2025',412,34,'₹19,400','₹970','₹18,430'],['Mar 2025',389,31,'₹17,920','₹896','₹17,024'],['Feb 2025',345,27,'₹15,600','₹780','₹14,820']].map(r=>`<tr>${r.map((c,i)=>`<td style="${i===5?'font-family:var(--font-mono);color:var(--green);font-weight:600':i===4?'color:var(--red)':''}">${c}</td>`).join('')}</tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div id="sec-profile" class="dash-section hidden">
+      <h2 style="color:var(--espresso);margin-bottom:24px">Provider Settings</h2>
+      <div style="max-width:540px" id="settings-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Menu Item Modal -->
+<div class="modal-overlay" id="add-item-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add Menu Item</span>
+      <button class="modal-close" onclick="closeModal('add-item-modal')">×</button>
+    </div>
+    <div class="form-group"><label class="form-label">Item Name <span class="req">*</span></label><input type="text" class="form-control" id="new-item-name" placeholder="e.g. Special Thali"></div>
+    <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-control" id="new-item-desc" placeholder="e.g. 2 sabzi, dal, rice, 4 roti…"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Price (₹) <span class="req">*</span></label><input type="number" class="form-control" id="new-item-price" placeholder="80"></div>
+      <div class="form-group"><label class="form-label">Category</label>
+        <select class="form-control" id="new-item-cat"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Special</option></select>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-full mt-16" onclick="saveNewItem()">Add to Menu →</button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+const user = Auth.require('provider');
+if (!user) throw 0;
+
+const provider = getProvider(user.providerId || 'p1');
+
+document.getElementById('provider-greeting').innerHTML = `
+  <h2>Welcome, ${user.name.split(' ')[0]}! 👩‍🍳</h2>
+  <p>${provider ? provider.name : 'Your Kitchen'} · ${new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</p>`;
+
+function showSection(name, link) {
+  document.querySelectorAll('.dash-section').forEach(s=>s.classList.add('hidden'));
+  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.remove('hidden');
+  if (link) link.classList.add('active');
+  event && event.preventDefault();
+}
+
+// Stats
+document.getElementById('p-stat-cards').innerHTML = `
+  <div class="stat-card"><div class="s-label">Today's Orders</div><div class="s-value">34</div><div class="s-change up">↑ 4 vs yesterday</div></div>
+  <div class="stat-card"><div class="s-label">Active Subscribers</div><div class="s-value">34</div><div class="s-change up">↑ 3 new this week</div></div>
+  <div class="stat-card"><div class="s-label">Today's Revenue</div><div class="s-value">₹2,640</div><div class="s-change up">↑ 8%</div></div>
+  <div class="stat-card"><div class="s-label">Paused Meals</div><div class="s-value">3</div><div class="s-change">Don't prepare these</div></div>`;
+
+// Meal summary
+document.getElementById('meal-summary').innerHTML = `
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
+    <div><div style="font-weight:600;color:var(--espresso)">Breakfast</div><div style="font-size:0.8rem;color:var(--muted)">7:30 AM delivery</div></div>
+    <div style="text-align:right"><div style="font-family:var(--font-mono);font-size:1.3rem;font-weight:700;color:var(--saffron)">12</div><div style="font-size:0.75rem;color:var(--muted)">meals to prepare</div></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
+    <div><div style="font-weight:600;color:var(--espresso)">Lunch</div><div style="font-size:0.8rem;color:var(--muted)">12:30 PM delivery</div></div>
+    <div style="text-align:right"><div style="font-family:var(--font-mono);font-size:1.3rem;font-weight:700;color:var(--saffron)">14</div><div style="font-size:0.75rem;color:var(--muted)">meals to prepare</div></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0">
+    <div><div style="font-weight:600;color:var(--espresso)">Dinner</div><div style="font-size:0.8rem;color:var(--muted)">7:30 PM delivery</div></div>
+    <div style="text-align:right"><div style="font-family:var(--font-mono);font-size:1.3rem;font-weight:700;color:var(--saffron)">8</div><div style="font-size:0.75rem;color:var(--muted)">meals to prepare</div></div>
+  </div>`;
+
+// Weekly chart
+const weekDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const weekVals = [28,32,25,34,29,18,21];
+const maxV = Math.max(...weekVals);
+document.getElementById('week-chart').innerHTML = weekVals.map((v,i)=>`
+  <div class="chart-bar" style="height:${(v/maxV)*100}px" title="${weekDays[i]}: ${v} orders"></div>`).join('');
+document.getElementById('week-labels').innerHTML = weekDays.map(d=>`<div class="chart-label">${d}</div>`).join('');
+
+// Delivery list
+const deliveries = Array.from({length:14}, (_, i) => ({
+  num: i+1, name: ['Rahul K.','Sneha M.','Aakash T.','Priya N.','Arjun M.','Divya R.','Kiran S.','Mohit J.','Riya P.','Suresh K.','Anjali V.','Deepak R.','Pooja S.','Vikram T.'][i],
+  hostel: ['Boys Hostel A','Girls Hostel','Boys Hostel B','Girls Hostel','Boys Hostel A','Girls Hostel','PG Hostel','Boys Hostel B','Girls Hostel','Boys Hostel A','Girls Hostel','Boys Hostel C','Girls Hostel','PG Hostel'][i],
+  block: ['A-'+((i+1)*12),'G-'+(i*7+1),'B-'+(i+2),'G-'+(i*5),'A-'+(i*3+1),'G-'+(i*6),'P-'+(i+1),'B-'+(i*4),'G-'+(i*2+3),'A-'+(i*8),'G-'+(i+5),'C-'+(i*3),'G-'+(i*4+1),'P-'+(i*2)][i],
+  phone: `98${String(i+1).padStart(2,'0')}XXXXX${i}`,
+  meal: i<12?'Lunch':'Dinner', status: i%5===3?'paused':'active'
+}));
+
+function renderDeliveries(filter) {
+  const list = filter==='all' ? deliveries : deliveries.filter(d=>d.meal===filter);
+  document.getElementById('delivery-list').innerHTML = list.map(d=>`
+    <div class="delivery-card" style="${d.status==='paused'?'opacity:0.5;background:#fafafa':''}">
+      <div class="delivery-num">#${d.num}</div>
+      <div class="delivery-info">
+        <div class="delivery-name">${d.name} ${d.status==='paused'?'<span style="color:var(--red);font-size:0.75rem">(PAUSED)</span>':''}</div>
+        <div class="delivery-meta">📍 ${d.hostel} · Room ${d.block}</div>
+      </div>
+      <div style="font-size:0.82rem;color:var(--muted)">${d.phone}</div>
+      <span class="badge ${d.meal==='Breakfast'?'badge-orange':d.meal==='Lunch'?'badge-green':'badge-gray'}">${d.meal}</span>
+    </div>`).join('');
+}
+
+function filterDeliveries(filter, btn) {
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderDeliveries(filter);
+}
+renderDeliveries('all');
+
+// Menu manager
+let menuItems = provider ? [...provider.meals] : [];
+function renderMenu() {
+  const cats = [...new Set(menuItems.map(m=>m.category))];
+  document.getElementById('menu-manager').innerHTML = cats.map(cat=>`
+    <div class="card mb-16" style="margin-bottom:16px">
+      <div class="card-body">
+        <h4 style="color:var(--espresso);margin-bottom:16px">${cat}</h4>
+        ${menuItems.filter(m=>m.category===cat).map(m=>`
+          <div class="menu-item-row">
+            <div class="item-name">${m.name}<div style="font-size:0.78rem;color:var(--muted);margin-top:2px">${m.desc||''}</div></div>
+            <div class="item-price">₹${m.price}</div>
+            <div class="item-toggle">
+              <label class="toggle"><input type="checkbox" checked onchange="showToast('${m.name} availability updated','success')"><span class="slider"></span></label>
+            </div>
+            <button class="btn btn-sm" style="border:1px solid var(--border);color:var(--muted)" onclick="removeItem('${m.id}')">Remove</button>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+renderMenu();
+
+function removeItem(id) {
+  menuItems = menuItems.filter(m=>m.id!==id);
+  renderMenu();
+  showToast('Item removed from menu','info');
+}
+
+// Subscribers
+const subscribers = [
+  { name:'Rahul Kumar',  hostel:'Boys Hostel A', block:'A-204', plan:'Monthly', phone:'9876543210', status:'active' },
+  { name:'Sneha Mishra', hostel:'Girls Hostel',  block:'G-112', plan:'Monthly', phone:'9876543211', status:'active' },
+  { name:'Aakash Tyagi', hostel:'Boys Hostel B', block:'B-308', plan:'Weekly',  phone:'9876543212', status:'active' },
+  { name:'Priya Nair',   hostel:'Girls Hostel',  block:'G-205', plan:'Monthly', phone:'9876543213', status:'active' },
+  { name:'Arjun Mehta',  hostel:'Boys Hostel A', block:'A-101', plan:'Daily',   phone:'9876543214', status:'paused' },
+];
+document.getElementById('subscriber-table').innerHTML = subscribers.map((s,i)=>`
+  <tr>
+    <td>${i+1}</td>
+    <td style="font-weight:500;color:var(--espresso)">${s.name}</td>
+    <td>${s.hostel} · ${s.block}</td>
+    <td><span class="badge badge-orange">${s.plan}</span></td>
+    <td style="font-family:var(--font-mono);font-size:0.82rem">${s.phone}</td>
+    <td><span class="badge ${s.status==='active'?'badge-green':'badge-gray'}">${s.status==='active'?'Active':'Paused'}</span></td>
+  </tr>`).join('');
+
+// Settings
+document.getElementById('settings-content').innerHTML = `
+  <div class="card mb-16">
+    <div class="card-body">
+      <h4 style="margin-bottom:16px;color:var(--espresso)">Kitchen Info</h4>
+      <div class="form-group"><label class="form-label">Kitchen Name</label><input class="form-control" value="${provider?provider.name:'Your Kitchen'}"></div>
+      <div class="form-group"><label class="form-label">Cuisine Type</label><input class="form-control" value="${provider?provider.cuisine:'Home Style'}"></div>
+      <div class="form-group"><label class="form-label">Delivery Times</label><input class="form-control" value="${provider?provider.deliveryTime:''}"></div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-control"><option>Open</option><option>Temporarily Closed</option></select>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="showToast('Settings saved','success')">Save Changes</button>
+    </div>
+  </div>`;
+
+function openAddItem() { document.getElementById('add-item-modal').classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function saveNewItem() {
+  const name  = document.getElementById('new-item-name').value.trim();
+  const desc  = document.getElementById('new-item-desc').value.trim();
+  const price = parseInt(document.getElementById('new-item-price').value);
+  const cat   = document.getElementById('new-item-cat').value;
+  if (!name||!price) { showToast('Please fill name and price','error'); return; }
+  menuItems.push({ id:'m'+Date.now(), name, desc, price, category:cat });
+  renderMenu();
+  closeModal('add-item-modal');
+  showToast(`${name} added to menu`,'success');
+}
+
+function exportCSV() {
+  const rows = [['#','Name','Hostel','Block','Phone','Meal'],...deliveries.map(d=>[d.num,d.name,d.hostel,d.block,d.phone,d.meal])];
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a'); a.href='data:text/csv,'+encodeURIComponent(csv);
+  a.download='tiffy_delivery_list.csv'; a.click();
+  showToast('Delivery list exported','success');
+}
+</script>
+</body>
+</html>
