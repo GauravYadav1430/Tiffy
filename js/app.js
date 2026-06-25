@@ -143,7 +143,7 @@ const PROVIDERS = [
   { id: 'p1', name: "Manya Tiffin Service", owner: "Manya", area: "Suranussi",
     cuisine: "North Indian", rating: 4.8, reviews: 142, isVeg: true, isOpen: true,
     plans: ['Daily', 'Weekly', 'Monthly'], priceFrom: 60, priceMonthly: 1499,
-    deliveryTime: "7:30 AM & 12:30 PM", emoji: "🍛", image: "public/tiffins/tiffin1.png",
+    deliveryTime: "7:30 AM & 12:30 PM", emoji: "🍛", image: "assets/tiffins/tiffin1.png",
     meals: [
       { id: 'm1', name: "Lunch Thali", desc: "2 sabzi, dal, rice, 3 roti, salad, pickle", price: 80, category: "Lunch" },
       { id: 'm2', name: "Dinner Thali", desc: "1 sabzi, dal, rice, 4 roti, sweet", price: 75, category: "Dinner" },
@@ -153,7 +153,7 @@ const PROVIDERS = [
   { id: 'p2', name: "RM Tiffin Service", owner: "RM", area: "Near SARB Multiplex",
     cuisine: "South Indian", rating: 4.6, reviews: 98, isVeg: true, isOpen: true,
     plans: ['Weekly', 'Monthly'], priceFrom: 55, priceMonthly: 1299,
-    deliveryTime: "8:00 AM & 1:00 PM", emoji: "🥘", image: "public/tiffins/tiffin2.jpg",
+    deliveryTime: "8:00 AM & 1:00 PM", emoji: "🥘", image: "assets/tiffins/tiffin2.jpg",
     meals: [
       { id: 'm4', name: "Idli Sambar (4 pcs)", desc: "4 soft idlis, sambar, coconut chutney", price: 50, category: "Breakfast" },
       { id: 'm5', name: "Meals (Full)", desc: "Rice, sambar, 2 curries, rasam, papad", price: 90, category: "Lunch" },
@@ -162,7 +162,7 @@ const PROVIDERS = [
   { id: 'p3', name: "Jai Maa Tiffin Service", owner: "Gurpreet Kaur", area: "Near PAP Chownk",
     cuisine: "Punjabi", rating: 4.5, reviews: 67, isVeg: false, isOpen: true,
     plans: ['Daily', 'Monthly'], priceFrom: 70, priceMonthly: 1699,
-    deliveryTime: "12:00 PM & 7:30 PM", emoji: "🫕", image: "public/tiffins/tiffin3.jpg",
+    deliveryTime: "12:00 PM & 7:30 PM", emoji: "🫕", image: "assets/tiffins/tiffin3.jpg",
     meals: [
       { id: 'm6', name: "Punjabi Lunch", desc: "Dal makhani / rajma, rice, 2 roti, lassi", price: 90, category: "Lunch" },
       { id: 'm7', name: "Non-Veg Thali", desc: "Chicken curry, rice, 3 roti, raita", price: 120, category: "Lunch" },
